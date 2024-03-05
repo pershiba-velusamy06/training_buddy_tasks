@@ -6,7 +6,8 @@ const userschema = new Schema({
   phoneNumber: { type: String, required: true },
   email: { type: String, required: true },
   accessToken: { type: String },
-  expiryTime: { type: String }
+  expiryTime: { type: String },
+  awards:{type:Array}
 });
 
 const userInfo = model('userInfo', userschema);

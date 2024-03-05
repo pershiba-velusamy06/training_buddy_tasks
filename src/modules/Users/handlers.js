@@ -1,4 +1,3 @@
-import express from 'express'
 import { findAndUpdateUser } from '../../dao/User.js';
 import jwt from 'jsonwebtoken';
 export async function createUser(req, res) {
@@ -22,7 +21,7 @@ export async function createUser(req, res) {
             message: "User authenticated successfully!",
         });
     } catch (err) {
-        console.log(err, "err>>>>>>>>>>>")
+     
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 }

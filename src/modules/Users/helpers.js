@@ -1,7 +1,6 @@
 export const userValidation = (req, res, next) => {
-    const allowedFields = ['email', 'phoneNumber', 'firstname', 'lastname']; // Define allowed fields
+    const allowedFields = ['email', 'phoneNumber', 'firstname', 'lastname'];
 
-    // Check if any extra fields are present
     const extraFields = Object.keys(req.body).filter(field => !allowedFields.includes(field));
 
     if (extraFields.length > 0) {
@@ -16,7 +15,7 @@ export const userValidation = (req, res, next) => {
         });
     }
 
-    // Validate each field
+
     const validations = {
         email: value => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -75,6 +74,6 @@ export const userValidation = (req, res, next) => {
         }
     }
 
-    // If all validations pass, proceed to the next middleware
+  
     next();
 }

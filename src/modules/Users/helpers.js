@@ -6,7 +6,7 @@ export const userValidation = (req, res, next) => {
     if (extraFields.length > 0) {
         const errorMessage = `Invalid or extra parameters: ${extraFields.join(', ')}.`;
 
-        return res.status(400).send({
+        return res.status(500).send({
             success: false,
             isAuth: false,
             errorCode: -1,
@@ -43,7 +43,7 @@ export const userValidation = (req, res, next) => {
 
     for (const field of allowedFields) {
         if (!req.body[field]) {
-            return res.status(400).send({
+            return res.status(500).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -53,7 +53,7 @@ export const userValidation = (req, res, next) => {
         }
 
         if (typeof req.body[field] !== 'string') {
-            return res.status(400).send({
+            return res.status(500).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -64,7 +64,7 @@ export const userValidation = (req, res, next) => {
 
         const validationError = validations[field](req.body[field]);
         if (validationError) {
-            return res.status(400).send({
+            return res.status(500).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,

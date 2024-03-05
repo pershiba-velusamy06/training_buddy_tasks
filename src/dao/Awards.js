@@ -63,3 +63,16 @@ export const getAllAwardsByReference = async (awards,start,offset) => {
         }
     })
 }
+export const deleteAwardsDao = async (awardIds) => {
+   
+    return new Promise(async (resolve, reject) => {
+        try {
+            const deleteResult = await Awards.deleteMany({ _id: { $in: awardIds } });
+            resolve(deleteResult);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}
+
+

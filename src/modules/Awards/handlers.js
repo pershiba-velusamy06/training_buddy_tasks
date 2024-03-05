@@ -1,6 +1,6 @@
-import { CreateAwards, getAllAwardsByReference, updateAwardsDao } from '../../dao/Awards.js';
+import { CreateAwards, deleteAwardsDao, getAllAwardsByReference, updateAwardsDao } from '../../dao/Awards.js';
 import jwt from 'jsonwebtoken';
-import { findUser, finduserById, updateAwardCreationinUser } from '../../dao/User.js';
+import { findAwardsExsistinUser, findUser, finduserById, removeAwardsFromUser, updateAwardCreationinUser } from '../../dao/User.js';
 export async function createAwards(req, res) {
 
     try {
@@ -23,7 +23,7 @@ export async function createAwards(req, res) {
                 message: "User Created Award added Successfully.",
             });
         } else {
-            return res.status(400).send({
+            return res.status(500).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -66,7 +66,7 @@ export async function updateAwards(req, res) {
                 });
             }
         } else {
-            return res.status(400).send({
+            return res.status(500).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -86,29 +86,57 @@ export async function viewAllAwardsOfUser(req, res) {
     try {
         const { start, offset } = req.query;
         const usercode = req.body.usercode;
-       
-        if (!usercode) {
-            return res.status(400).send({
-                statusCode: 400,
-                success: false,
-                isAuth: false,
-                message: "User code is missing.",
-            });
-        }
+
+
         let user = await finduserById(usercode)
         console.log(user)
         if (user) {
 
-            const awardsList = await getAllAwardsByReference(user.awards,start, offset )
+            const awardsList = await getAllAwardsByReference(user.awards, start, offset)
 
             res.send({
                 statusCode: 200,
                 result: awardsList,
-                totalAwardsCount:user.awards.length,
+                totalAwardsCount: user.awards.length,
                 success: true,
                 isAuth: true,
                 message: "Awards Fetched Successfully.",
             });
+        }
+
+    } catch (error) {
+        console.log(error, "err>>>>>>>>>>>")
+        res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
+    }
+}
+
+export async function deleteAwards(req, res) {
+    try {
+        let auth = req.headers.authorization;
+        const decoded = jwt.verify(auth, "elred");
+
+        let phoneNumber = decoded.phoneNumber
+        const isexsist = await findAwardsExsistinUser(phoneNumber, req.body.awards)
+        if (isexsist) {
+            const deleteResult = await deleteAwardsDao(req.body.awards)
+            if (deleteResult) {
+                const removeAwards = await removeAwardsFromUser(phoneNumber, req.body.awards)
+                if (removeAwards) {
+                    res.send({ success: true, isAuth: true, message: "Awards Deleted Successfully.", result: [] });
+                }
+            }
+
+        } else {
+
+            return res.status(500).send({
+                success: false,
+                isAuth: false,
+                errorCode: -1,
+                message: "Award not belongs to the user",
+                result: []
+            });
+
+
         }
 
     } catch (error) {

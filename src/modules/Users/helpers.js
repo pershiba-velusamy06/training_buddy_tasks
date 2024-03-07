@@ -1,3 +1,5 @@
+import {  errorMessages } from "./responseMessage.js";
+
 export const userValidation = (req, res, next) => {
     const allowedFields = ['email', 'phoneNumber', 'firstname', 'lastname'];
 
@@ -20,13 +22,13 @@ export const userValidation = (req, res, next) => {
         email: value => {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(value)) {
-                return 'Invalid email format.';
+                return errorMessages.emailError;
             }
         },
         phoneNumber: value => {
             const phoneNumberRegex = /^\+91\d{10}$/;
             if (!phoneNumberRegex.test(value)) {
-                return 'Invalid phone number format. It should start with +91 and be 10 digits long.';
+                return errorMessages.phoneNumberError;
             }
         },
         firstname: value => {

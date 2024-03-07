@@ -1,5 +1,6 @@
 import { findAndUpdateUser } from '../../dao/User.js';
 import jwt from 'jsonwebtoken';
+import {successMessage,errorMessage} from './responseMessage.js'
 export async function createUser(req, res) {
 
     try {
@@ -18,10 +19,10 @@ export async function createUser(req, res) {
             Result: userData,
             success: true,
             isAuth: false,
-            message: "User authenticated successfully!",
+            message: successMessage.authenticationSuccess,
         });
     } catch (err) {
      
-        res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
+        res.send({ statusCode: 500, result: [], status: 'Failure', message: errorMessage.internalServerError});
     }
 }

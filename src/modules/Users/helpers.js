@@ -1,7 +1,6 @@
-import {  errorMessages } from "./responseMessage.js";
+import {  errorMessages,allowedFields } from "./responseMessage.js";
 
 export const userValidation = (req, res, next) => {
-    const allowedFields = ['email', 'phoneNumber', 'firstname', 'lastname'];
 
     const extraFields = Object.keys(req.body).filter(field => !allowedFields.includes(field));
 
@@ -33,12 +32,12 @@ export const userValidation = (req, res, next) => {
         },
         firstname: value => {
             if (value.length < 3 || value.length > 20) {
-                return 'First name should be between 3 and 20 characters long.';
+                return errorMessages.firstNameError;
             }
         },
         lastname: value => {
             if (value.length < 3 || value.length > 20) {
-                return 'Last name should be between 3 and 20 characters long.';
+                return errorMessages.lastNameError;
             }
         }
     };

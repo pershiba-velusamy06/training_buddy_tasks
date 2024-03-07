@@ -1,6 +1,7 @@
 import { CreateAwards, deleteAwardsDao, getAllAwardsByReference, updateAwardsDao } from '../../dao/Awards.js';
 import jwt from 'jsonwebtoken';
 import { findAwardsExsistinUser, findUser, finduserById, removeAwardsFromUser, updateAwardCreationinUser } from '../../dao/User.js';
+import { successMessage } from './responseMessages.js';
 export async function createAwards(req, res) {
 
     try {
@@ -8,19 +9,17 @@ export async function createAwards(req, res) {
         const decoded = jwt.verify(auth, "elred");
 
         let phoneNumber = decoded.phoneNumber
-        console.log(req.body, "res.body")
         let bodyData = { ...req.body, approvalStatus: "accepted" }
 
         let Award = await CreateAwards(bodyData)
-        console.log(Award, "Award")
         if (Award) {
             const insertToUser = await updateAwardCreationinUser(phoneNumber, Award.awardId)
-            res.send({
-                statusCode: 200,
+            res.status(200).send({
+              
                 Result: [Award],
                 success: true,
                 isAuth: true,
-                message: "User Created Award added Successfully.",
+                message: successMessage.createAwardSucess,
             });
         } else {
             return res.status(500).send({
@@ -33,7 +32,7 @@ export async function createAwards(req, res) {
         }
 
     } catch (err) {
-        console.log(err, "err>>>>>>>>>>>")
+        
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 }
@@ -57,16 +56,16 @@ export async function updateAwards(req, res) {
 
             let updateAwardsDetail = await updateAwardsDao(req.body.awardId, reqObject)
             if (updateAwardsDetail) {
-                res.send({
-                    statusCode: 200,
+                res.status(200).send({
+                    
                     Result: [updateAwardsDetail],
                     success: true,
                     isAuth: true,
-                    message: "Selected Award Modified Successfully.",
+                    message: successMessage.editAwardsSucess,
                 });
             }
         } else {
-            return res.status(500).send({
+            return res.status(200).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -75,7 +74,7 @@ export async function updateAwards(req, res) {
             });
         }
     } catch (err) {
-        console.log(err, "err>>>>>>>>>>>")
+      
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 
@@ -100,12 +99,12 @@ export async function viewAllAwardsOfUser(req, res) {
                 totalAwardsCount: user.awards.length,
                 success: true,
                 isAuth: true,
-                message: "Awards Fetched Successfully.",
+                message: successMessage.fetchAwardsSucess,
             });
         }
 
     } catch (error) {
-        console.log(error, "err>>>>>>>>>>>")
+     
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 }
@@ -122,13 +121,18 @@ export async function deleteAwards(req, res) {
             if (deleteResult) {
                 const removeAwards = await removeAwardsFromUser(phoneNumber, req.body.awards)
                 if (removeAwards) {
-                    res.send({ success: true, isAuth: true, message: "Awards Deleted Successfully.", result: [] });
+                    res.status(200).send({
+                        success: true,
+                        isAuth: true,
+                        message: successMessage.deleteAwardsSucess,
+                        result: []
+                    });
                 }
             }
 
         } else {
 
-            return res.status(500).send({
+            return res.status(200).send({
                 success: false,
                 isAuth: false,
                 errorCode: -1,
@@ -140,7 +144,7 @@ export async function deleteAwards(req, res) {
         }
 
     } catch (error) {
-        console.log(error, "err>>>>>>>>>>>")
+   
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 }

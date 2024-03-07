@@ -1,22 +1,5 @@
 import userInfo from "../modals/UserSchema.js";
 
-export const findAndUpdateUser = async (data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            const existingUser = await userInfo.findOneAndUpdate(
-                { phoneNumber: data.phoneNumber },
-                data,
-                { new: true, upsert: true }
-            );
-
-            resolve(existingUser);
-        } catch (error) {
-            reject(error);
-        }
-    });
-}
-
 export const updateAwardCreationinUser = async (phoneNumber, awardId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -61,9 +44,17 @@ export const findUser = async (phoneNumber, awardId) => {
 export const finduserById = async (userId) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await userInfo.findById(userId)
-            resolve(user)
+            const user = await userInfo.findOne({_id:userId})
+            if(user){
+                console.log(user,"user>>>>")
+                resolve(user)
+            }else{
+                console.log(user,"null user")
+                resolve(null)
+            }
+          
         } catch (error) {
+            console.log(error)
             reject(error)
         }
 

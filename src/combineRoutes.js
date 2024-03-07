@@ -1,5 +1,5 @@
 import express from 'express';
-import userRoutes from './modules/Users/routes.js'; 
+import userRoutes from './modules/Users/userRoutes.js'; 
 import awardsRoutes from './modules/Awards/routes.js';
 
 

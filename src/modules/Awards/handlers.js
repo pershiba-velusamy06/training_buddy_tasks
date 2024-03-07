@@ -101,6 +101,15 @@ export async function viewAllAwardsOfUser(req, res) {
                 isAuth: true,
                 message: successMessage.fetchAwardsSucess,
             });
+        }else{
+            res.send({
+                statusCode: 200,
+                result: [],
+                totalAwardsCount: 0,
+                success: true,
+                isAuth: true,
+                message: "invalid usercode",
+            }); 
         }
 
     } catch (error) {

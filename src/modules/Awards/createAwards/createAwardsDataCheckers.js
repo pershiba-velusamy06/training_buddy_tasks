@@ -7,14 +7,17 @@ export const createAwardsDataCheckers = async (req, res) => {
         const extraFields = Object.keys(req.body).filter(field => !allowedFields.includes(field));
         if (extraFields.length > 0) {
             const errorMessage = `Invalid or extra parameters: ${extraFields.join(', ')}.`;
-            return sendErrorResponse(res, errorMessage)
+            // return sendErrorResponse(res, errorMessage)
+            return errorMessage
         }
         for (const field of allowedFields) {
             if (!req.body[field]) {
-                return sendErrorResponse(res, `${field} is missing.`)
+                return `${field} is missing.`
+                // return sendErrorResponse(res, `${field} is missing.`)
             }
             if (typeof req.body[field] !== 'string') {
-                return sendErrorResponse(res, `${field} should be a string.`)
+                return `${field} should be a string.`
+                // return sendErrorResponse(res, `${field} should be a string.`)
             }
         }
         let auth = req.headers.authorization;
@@ -23,7 +26,7 @@ export const createAwardsDataCheckers = async (req, res) => {
         let bodyData = { ...req.body, approvalStatus: "accepted" }
         let Award = await CreateAwardsValidator(bodyData)
         if (Award) {
-           await updateAwardCreationinUser(phoneNumber, Award.awardId)
+            await updateAwardCreationinUser(phoneNumber, Award.awardId)
             return [Award]
         } else {
             return []

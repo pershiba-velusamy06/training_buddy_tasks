@@ -1,27 +1,6 @@
 import Awards from '../modals/AwardsSchema.js';
 
 
-
-export const updateAwardsDao = async (awardId, data) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            const updatedAwards = await Awards.findOneAndUpdate({ _id: awardId }, data, { new: true })
-            const responseObject = {
-                awardId: updatedAwards._id,
-                awardTitle: updatedAwards.awardTitle,
-                description: updatedAwards.description,
-                issuedBy: updatedAwards.issuedBy,
-                issuedDate: updatedAwards.issuedDate,
-                approvalStatus: updatedAwards.approvalStatus
-            };
-            resolve(responseObject)
-        } catch (error) {
-            reject(error)
-        }
-    })
-}
-
 export const getAllAwardsByReference = async (awards,start,offset) => {
    
     let startValue= start===0?1:start

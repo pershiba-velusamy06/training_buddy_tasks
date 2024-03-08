@@ -1,28 +1,5 @@
 import userInfo from "../modals/UserSchema.js";
 
-export const findUser = async (phoneNumber, awardId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            const user = await userInfo.findOne({ phoneNumber: phoneNumber })
-            resolve(user)
-            if (!user) {
-                resolve(null)
-            } else {
-                const awardExists = user.awards.includes(awardId);
-                if (awardExists) {
-                    resolve(user)
-                } else {
-                    resolve(null)
-                }
-            }
-
-        } catch (error) {
-            reject(error);
-        }
-    });
-
-}
 
 export const finduserById = async (userId) => {
     return new Promise(async (resolve, reject) => {

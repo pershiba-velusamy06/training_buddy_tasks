@@ -1,10 +1,11 @@
 import express from 'express';
-import { deleteAwards, viewAllAwardsOfUser } from './handlers.js';
-import {  deleteAwardsValidator, fetchallAwardsValidator,  } from './helpers.js';
+import { deleteAwards } from './handlers.js';
+import {  deleteAwardsValidator  } from './helpers.js';
 import { AwardsHelper } from '../routeConstants.js'
 import { createAwardsController } from './createAwards/createAwardsController.js';
-import { awardsAuthMiddleware } from '../../middleware/awardsAuthMiddleware.js';
+import { awardsAuthMiddleware, awardsAuthWithUsercodeMiddleWare } from '../../middleware/awardsAuthMiddleware.js';
 import { editAwardsController } from './editAwards/editAwardsController.js';
+import { userSpecificAwardsController } from './userSpecificAwards/userSpecificAwardsController.js';
 const awardsRoutes = express.Router();
 
 awardsRoutes.post(AwardsHelper.addUserAwards, awardsAuthMiddleware, async (req, res,next) => {
@@ -15,9 +16,9 @@ awardsRoutes.patch(AwardsHelper.editUserAwards, awardsAuthMiddleware, async (req
 
     return await editAwardsController(req, res,next);
 });
-awardsRoutes.post(AwardsHelper.viewUserAwards, fetchallAwardsValidator, async (req, res) => {
+awardsRoutes.post(AwardsHelper.viewUserAwards, awardsAuthWithUsercodeMiddleWare, async (req, res) => {
 
-    return await viewAllAwardsOfUser(req, res);
+    return await userSpecificAwardsController(req, res);
 });
 
 awardsRoutes.delete(AwardsHelper.deleteUserAwards, deleteAwardsValidator, async (req, res) => {

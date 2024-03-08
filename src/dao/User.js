@@ -1,22 +1,5 @@
 import userInfo from "../modals/UserSchema.js";
 
-export const updateAwardCreationinUser = async (phoneNumber, awardId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-
-            const updateUserData = await userInfo.updateOne({ phoneNumber: phoneNumber }, { $addToSet: { awards: awardId } })
-            resolve(updateUserData)
-
-        } catch (error) {
-            reject(error);
-        }
-    });
-
-
-
-
-}
-
 export const findUser = async (phoneNumber, awardId) => {
     return new Promise(async (resolve, reject) => {
         try {

@@ -1,41 +1,8 @@
-import { CreateAwards, deleteAwardsDao, getAllAwardsByReference, updateAwardsDao } from '../../dao/Awards.js';
+import {  deleteAwardsDao, getAllAwardsByReference, updateAwardsDao } from '../../dao/Awards.js';
 import jwt from 'jsonwebtoken';
-import { findAwardsExsistinUser, findUser, finduserById, removeAwardsFromUser, updateAwardCreationinUser } from '../../dao/User.js';
-import { successMessage } from './responseMessages.js';
-export async function createAwards(req, res) {
+import { findAwardsExsistinUser, findUser, finduserById, removeAwardsFromUser } from '../../dao/User.js';
+import { successMessage } from '../../utils/Awards/awardsConstants.js';
 
-    try {
-        let auth = req.headers.authorization;
-        const decoded = jwt.verify(auth, "elred");
-
-        let phoneNumber = decoded.phoneNumber
-        let bodyData = { ...req.body, approvalStatus: "accepted" }
-
-        let Award = await CreateAwards(bodyData)
-        if (Award) {
-            const insertToUser = await updateAwardCreationinUser(phoneNumber, Award.awardId)
-            res.status(200).send({
-              
-                Result: [Award],
-                success: true,
-                isAuth: true,
-                message: successMessage.createAwardSucess,
-            });
-        } else {
-            return res.status(500).send({
-                success: false,
-                isAuth: false,
-                errorCode: -1,
-                message: "Awards not created",
-                result: []
-            });
-        }
-
-    } catch (err) {
-        
-        res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
-    }
-}
 
 export async function updateAwards(req, res) {
     try {

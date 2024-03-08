@@ -1,8 +1,8 @@
 import express from 'express';
 
-import { userSignUp } from './signup/userSignUpController.js';
+import { userSignUp } from './userSignUp/userSignUpController.js';
 import { userHelpers } from '../routeConstants.js';
-import { userValidation } from './signup/userSignUpDataChecker.js';
+import { userValidation } from './userSignUp/userSignUpDataChecker.js';
 
 
 const userRoutes = express.Router();

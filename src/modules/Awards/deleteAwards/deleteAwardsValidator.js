@@ -1,28 +1,21 @@
-import userInfo from "../modals/UserSchema.js";
+import Awards from "../../../modals/AwardsSchema.js";
+import userInfo from "../../../modals/UserSchema.js";
 
 
-export const finduserById = async (userId) => {
+
+export const deleteAwardsDao = async (awardIds) => {
+   
     return new Promise(async (resolve, reject) => {
         try {
-            const user = await userInfo.findOne({_id:userId})
-            if(user){
-                console.log(user,"user>>>>")
-                resolve(user)
-            }else{
-                console.log(user,"null user")
-                resolve(null)
-            }
-          
+            const deleteResult = await Awards.deleteMany({ _id: { $in: awardIds } });
+            resolve(deleteResult);
         } catch (error) {
-            console.log(error)
-            reject(error)
+            reject(error);
         }
-
-    })
+    });
 }
 
-
-export const findAwardsExsistinUser = async (phoneNumber, awards) => {
+export const findAwardsExsistingUser = async (phoneNumber, awards) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await userInfo.findOne({ phoneNumber: phoneNumber })

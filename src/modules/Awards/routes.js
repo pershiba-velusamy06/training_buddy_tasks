@@ -1,11 +1,10 @@
 import express from 'express';
-import { deleteAwards } from './handlers.js';
-import {  deleteAwardsValidator  } from './helpers.js';
 import { AwardsHelper } from '../routeConstants.js'
 import { createAwardsController } from './createAwards/createAwardsController.js';
 import { awardsAuthMiddleware, awardsAuthWithUsercodeMiddleWare } from '../../middleware/awardsAuthMiddleware.js';
 import { editAwardsController } from './editAwards/editAwardsController.js';
 import { userSpecificAwardsController } from './userSpecificAwards/userSpecificAwardsController.js';
+import { deleteAwardsControllers } from './deleteAwards/deleteAwardsControllers.js';
 const awardsRoutes = express.Router();
 
 awardsRoutes.post(AwardsHelper.addUserAwards, awardsAuthMiddleware, async (req, res,next) => {
@@ -21,9 +20,9 @@ awardsRoutes.post(AwardsHelper.viewUserAwards, awardsAuthWithUsercodeMiddleWare,
     return await userSpecificAwardsController(req, res);
 });
 
-awardsRoutes.delete(AwardsHelper.deleteUserAwards, deleteAwardsValidator, async (req, res) => {
+awardsRoutes.delete(AwardsHelper.deleteUserAwards, awardsAuthMiddleware, async (req, res) => {
 
-    return await deleteAwards(req, res);
+    return await deleteAwardsControllers(req, res);
 });
 
 export default awardsRoutes;

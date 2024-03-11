@@ -2,7 +2,7 @@ import userInfo from "../../../modals/UserSchema.js";
 
 
 export const userSignUpValidator = async (data) => {
-    console.log(data, "data")
+   
     return new Promise(async (resolve, reject) => {
         try {
 
@@ -11,7 +11,7 @@ export const userSignUpValidator = async (data) => {
                 data,
                 { new: true, upsert: true }
             );
-            console.log(existingUser, "existingUser")
+          
             resolve(existingUser);
         } catch (error) {
             reject(error);

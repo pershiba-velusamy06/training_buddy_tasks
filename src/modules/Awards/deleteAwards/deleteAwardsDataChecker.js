@@ -15,9 +15,9 @@ export const deleteAwardsDataChecker = async (req, res) => {
 
         }
     
-     
+        let bearerAuth = req.headers.authorization
+        let auth = bearerAuth.replace("Bearer ", "");
 
-        let auth = req.headers.authorization;
         const decoded = jwt.verify(auth, "elred");
 
         let phoneNumber = decoded.phoneNumber
@@ -38,7 +38,7 @@ export const deleteAwardsDataChecker = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error,"error")
+       
         throw Error('Internal server Error')
     }
 }

@@ -19,7 +19,7 @@ export const findAwardsExsistingUser = async (phoneNumber, awards) => {
     return new Promise(async (resolve, reject) => {
         try {
             const user = await userInfo.findOne({ phoneNumber: phoneNumber })
-            console.log(user,"user")
+          
             if (!user) {
                 resolve(false)
             } else {

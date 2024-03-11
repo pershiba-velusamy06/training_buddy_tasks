@@ -10,7 +10,7 @@ export async function editAwardsDataCheckers(req, res, next) {
             const errorMessage = `Invalid or extra parameters: ${extraFields.join(', ')}.`;
             return errorMessage
         }
-        for (const field of allowedFields) {
+        for (const field of allowedFieldsForEditAwards) {
             if (!req.body[field]) {
                 return `${field} is missing.`
             }
@@ -24,7 +24,9 @@ export async function editAwardsDataCheckers(req, res, next) {
                 }
             }
         }
-        let auth = req.headers.authorization;
+        let bearerAuth = req.headers.authorization
+        let auth = bearerAuth.replace("Bearer ", "");
+    
         const decoded = jwt.verify(auth, "elred");
         let phoneNumber = decoded.phoneNumber
         let user = await findUser(phoneNumber, req.body.awardId)
@@ -48,7 +50,7 @@ export async function editAwardsDataCheckers(req, res, next) {
             return null
         }
     } catch (err) {
-        console.log(err)
+     
         throw Error('Internal server Error')
     }
 

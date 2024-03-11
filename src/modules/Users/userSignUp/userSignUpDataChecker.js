@@ -10,7 +10,7 @@ export const userSignUpDataChecker = async (req, res) => {
             let expiryTime = Date.now() + (10 * 24 * 60 * 60 * 1000);
             let body = { ...req.body, accessToken: token, expiryTime: expiryTime.toString() }
             let User = await userSignUpValidator(body)
-            console.log(User, "User")
+          
             let userData = [{
                 accessToken: token,
                 expiryTime: expiryTime.toString(),

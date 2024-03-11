@@ -1,9 +1,10 @@
+import { allowedParams } from "../../../utils/Awards/awardsConstants.js";
 import { finduserById, getAllAwardsByReference } from "./userSpecificAwardsValidator.js";
 
 export const userSpecificAwardsDataChecker = async (req, res) => {
     try {
 
-        const allowedParams = ['start', 'offset'];
+       
         const extraParams = Object.keys(req.query).filter(key => !allowedParams.includes(key));
         if (extraParams.length > 0) {
             const errorMessage = `Extra query parameters found: ${extraParams.join(', ')}.`;

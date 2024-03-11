@@ -18,3 +18,21 @@ export const userSignUpValidator = async (data) => {
         }
     });
 }
+
+
+export const userbyEmailforSignUpValidator = async (data) => {
+   
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            const existingUser = await userInfo.findOne(
+                { email: data },
+               
+            );
+          
+            resolve(existingUser);
+        } catch (error) {
+            reject(error);
+        }
+    });
+}

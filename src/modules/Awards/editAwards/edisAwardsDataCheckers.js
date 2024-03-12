@@ -11,12 +11,17 @@ export async function editAwardsDataCheckers(req, res, next) {
             return errorMessage
         }
         for (const field of allowedFieldsForEditAwards) {
+            console.log(typeof req.body[field], "req.body[field]")
             if (!req.body[field]) {
                 return `${field} is missing.`
             }
-            if (typeof req.body[field] !== 'string') {
+            if (typeof req.body[field] !== 'number' && field === "pinSequence") {
+                return `${field} should be a number..`
+            }
+            if (typeof req.body[field] !== 'string' && field !== "pinSequence") {
                 return `${field} should be a string..`
             }
+
             if (field === 'issuedDate') {
                 const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
                 if (!dateRegex.test(req.body[field])) {
@@ -26,7 +31,7 @@ export async function editAwardsDataCheckers(req, res, next) {
         }
         let bearerAuth = req.headers.authorization
         let auth = bearerAuth.replace("Bearer ", "");
-    
+
         const decoded = jwt.verify(auth, "elred");
         let phoneNumber = decoded.phoneNumber
         let user = await findUser(phoneNumber, req.body.awardId)
@@ -37,7 +42,9 @@ export async function editAwardsDataCheckers(req, res, next) {
                 description: req.body.description,
                 issuedBy: req.body.issuedBy,
                 issuedDate: req.body.issuedDate,
-                approvalStatus: req.body.approvalStatus
+                approvalStatus: req.body.approvalStatus,
+                pinStatus: req.body.pinStatus,
+                pinSequence: req.body.pinSequence
             };
 
             let updateAwardsDetail = await editAwardsValidator(req.body.awardId, reqObject)
@@ -50,7 +57,7 @@ export async function editAwardsDataCheckers(req, res, next) {
             return null
         }
     } catch (err) {
-     
+
         throw Error('Internal server Error')
     }
 

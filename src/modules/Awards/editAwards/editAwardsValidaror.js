@@ -5,7 +5,6 @@ import userInfo from "../../../modals/UserSchema.js";
 export const editAwardsValidator = async (awardId, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-
             const updatedAwards = await Awards.findOneAndUpdate({ _id: awardId }, data, { new: true })
             if(updatedAwards){
                 const responseObject = {
@@ -14,7 +13,9 @@ export const editAwardsValidator = async (awardId, data) => {
                     description: updatedAwards.description,
                     issuedBy: updatedAwards.issuedBy,
                     issuedDate: updatedAwards.issuedDate,
-                    approvalStatus: updatedAwards.approvalStatus
+                    approvalStatus: updatedAwards.approvalStatus,
+                    pinStatus:updatedAwards.pinStatus ,
+                    pinSequence:updatedAwards.pinSequence
                 };
                 resolve(responseObject)
             }else{

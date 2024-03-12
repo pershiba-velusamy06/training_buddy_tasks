@@ -12,7 +12,9 @@ export const CreateAwardsValidator = async (data) => {
                     description: newAward.description,
                     issuedBy: newAward.issuedBy,
                     issuedDate: newAward.issuedDate,
-                    approvalStatus: newAward.approvalStatus
+                    approvalStatus: newAward.approvalStatus,
+                    pinStatus:newAward.pinStatus ,
+                    pinSequence:newAward.pinSequence
                 };
                 resolve(responseObject)
             }else{

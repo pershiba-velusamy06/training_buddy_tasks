@@ -30,15 +30,15 @@ export const finduserById = async (userId) => {
         try {
             const user = await userInfo.findOne({ _id: userId })
             if (user) {
-                console.log(user, "user>>>>")
+               
                 resolve(user)
             } else {
-                console.log(user, "null user")
+                
                 resolve(null)
             }
 
         } catch (error) {
-            console.log(error)
+         
             reject(error)
         }
 

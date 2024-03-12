@@ -14,7 +14,6 @@ export async function userSignUp(req, res) {
                 message: successMessage.authenticationSuccess,
             });
         }).catch((error) => {
-            console.log(error, "error")
             res.send({ statusCode: 500, result: [], status: 'Failure', message: errorMessages.internalServerError });
         })
 

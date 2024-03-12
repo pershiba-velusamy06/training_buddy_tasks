@@ -15,7 +15,7 @@ export const userSpecificAwardsDataChecker = async (req, res) => {
         const usercode = req.body.usercode;
         let user = await finduserById(usercode)
         if (user) {
-            console.log(user)
+       
             const awardsList = await getAllAwardsByReference(user.awards, start, offset)
             return [{
                 count: user.awards.length,
@@ -30,6 +30,7 @@ export const userSpecificAwardsDataChecker = async (req, res) => {
 
         }
     } catch (error) {
+
         
         throw Error('Internal server Error')
     }

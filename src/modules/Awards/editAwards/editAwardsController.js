@@ -29,7 +29,7 @@ export async function editAwardsController(req, res, next) {
         })
 
     } catch (err) {
-        console.log(err, "err")
+      
         res.status(500).send({ errorCode: -1, result: [], status: 'Failure', message: 'internal server error' });
 
 

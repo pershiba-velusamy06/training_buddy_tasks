@@ -3,8 +3,6 @@ import { finduserById, getAllAwardsByReference } from "./userSpecificAwardsValid
 
 export const userSpecificAwardsDataChecker = async (req, res) => {
     try {
-
-       
         const extraParams = Object.keys(req.query).filter(key => !allowedParams.includes(key));
         if (extraParams.length > 0) {
             const errorMessage = `Extra query parameters found: ${extraParams.join(', ')}.`;
@@ -15,27 +13,20 @@ export const userSpecificAwardsDataChecker = async (req, res) => {
         const usercode = req.body.usercode;
         let user = await finduserById(usercode)
         if (user) {
-       
             const awardsList = await getAllAwardsByReference(user.awards, start, offset)
             return [{
                 count: user.awards.length,
                 awardsList: awardsList
             }]
-
         } else {
             return [{
                 count: 0,
                 awardsList: []
             }]
-
         }
     } catch (error) {
 
-        
+     
         throw Error('Internal server Error')
     }
-
-
-
-
 }

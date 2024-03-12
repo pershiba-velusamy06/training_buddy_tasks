@@ -17,5 +17,5 @@ export const successMessage={
 }
 
 export const allowedFields = ['awardTitle', 'description', 'issuedBy', 'issuedDate'];
-export const allowedFieldsForEditAwards = ['awardTitle', 'description', 'issuedBy', 'issuedDate', "awardId", "approvalStatus"];
+export const allowedFieldsForEditAwards = ['awardTitle', 'description', 'issuedBy', 'issuedDate', "awardId", "approvalStatus","pinStatus","pinSequence"];
 export const allowedParams = ['start', 'offset'];

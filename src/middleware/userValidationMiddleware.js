@@ -1,23 +1,7 @@
 import Ajv from 'ajv';
-import { errorMessages, sendErrorResponse, validations } from '../utils/users/userConstant.js';
+import { sendErrorResponse, userSchema, validations } from '../utils/users/userConstant.js';
 import { userbyEmailforSignUpValidator } from '../modules/Users/userSignUp/userSignUpValidator.js';
 
-
-
-
-
-const userSchema = {
-    type: 'object',
-    properties: {
-        firstname: { type: 'string', minLength: 3, maxLength: 20 },
-        lastname: { type: 'string', minLength: 3, maxLength: 20 },
-        phoneNumber: { type: 'string', pattern: '^\\+91\\d{10}$' },
-        email: { type: 'string', format: 'email' }, 
-       
-    },
-    required: ['firstname', 'lastname', 'phoneNumber', 'email'], 
-    additionalProperties: false
-};
 
 const ajv = new Ajv();
 

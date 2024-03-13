@@ -6,9 +6,11 @@ import { editAwardsController } from './editAwards/editAwardsController.js';
 import { userSpecificAwardsController } from './userSpecificAwards/userSpecificAwardsController.js';
 import { deleteAwardsControllers } from './deleteAwards/deleteAwardsControllers.js';
 import { rearrangeUserAwardsControllers } from './rearrangeUserAwards/rearrangeUserAwardsControllers.js';
+import { awardsValidationMiddleware } from '../../middleware/createAwardsMiddleware.js';
+
 const awardsRoutes = express.Router();
 
-awardsRoutes.post(AwardsHelper.addUserAwards, awardsAuthMiddleware, async (req, res, next) => {
+awardsRoutes.post(AwardsHelper.addUserAwards, awardsValidationMiddleware, async (req, res, next) => {
     return await createAwardsController(req, res, next);
 });
 awardsRoutes.patch(AwardsHelper.editUserAwards, awardsAuthMiddleware, async (req, res, next) => {

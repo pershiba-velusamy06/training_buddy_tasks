@@ -1,6 +1,7 @@
 import Ajv from 'ajv';
-import { sendErrorResponse, userSchema, validations } from '../utils/users/userConstant.js';
+import { sendErrorResponse, validations } from '../utils/users/userConstant.js';
 import { userbyEmailforSignUpValidator } from '../modules/Users/userSignUp/userSignUpValidator.js';
+import { userSchema } from './validationSchema/userSchema.js';
 
 const ajv = new Ajv();
 
@@ -38,7 +39,10 @@ export const userValidation = async(req, res, next) => {
                 return { field:errorFeildname , message: error.message };
             }
         });
-        return res.status(500).json({ success: false, message: 'Invalid request body', errors });
+        return res.status(500).json({ success: false,
+            isAuth: false,
+            errorCode: -1,
+            errors});
     }
     const existingUser = await userbyEmailforSignUpValidator(req.body.email);
     if (existingUser && existingUser.phoneNumber !== req.body.phoneNumber) {

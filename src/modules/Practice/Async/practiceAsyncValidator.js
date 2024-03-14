@@ -35,10 +35,9 @@ export const fetchSomeArray = async () => {
             const fetchAwardsData = []
             let idsList = ['65eefbaeb43a554aafd2c894', '65eefc18b43a554aafd2c89c', '65eefc1cb43a554aafd2c89f'];
             async.forEachLimit(idsList, 2, async (value, index, callback) => {
-                console.log(index, "index")
+               
                 const data = await Awards.findOne({ _id: value })
                 fetchAwardsData.push(data)
-                // callback(null)
                 resolve(fetchAwardsData)
 
             })

@@ -26,7 +26,6 @@ export const rearrangeUserAwardsControllers = async (req, res) => {
 
         })
     } catch (error) {
-        console.log(error, "error<<<<<<<<<<<<<<<<<<")
         res.status(500).send({ errorCode: -1, result: [], status: 'Failure', message: 'internal server error' });
 
     }

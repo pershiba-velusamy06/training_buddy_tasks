@@ -11,19 +11,24 @@ export const userSpecificAwardsDataChecker = async (req, res) => {
         }
         const { start, offset } = req.query;
         const usercode = req.body.usercode;
-        let user = await finduserById(usercode)
-        if (user) {
-            const awardsList = await getAllAwardsByReference(user.awards, start, offset)
-            return [{
-                count: user.awards.length,
-                awardsList: awardsList
-            }]
-        } else {
-            return [{
-                count: 0,
-                awardsList: []
-            }]
+        if(usercode!==""){
+            let user = await finduserById(usercode)
+            if (user) {
+                const awardsList = await getAllAwardsByReference(user.awards, start, offset)
+                return [{
+                    count: user.awards.length,
+                    awardsList: awardsList
+                }]
+            } else {
+                return [{
+                    count: 0,
+                    awardsList: []
+                }]
+            }
+        }else{
+            return `usercode should not be empty string`
         }
+       
     } catch (error) {
 
      

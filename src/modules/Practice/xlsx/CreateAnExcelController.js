@@ -11,7 +11,6 @@ export const createAnExcelController = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error,"error>>>>>>>>>>")
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 
@@ -29,7 +28,7 @@ export const readAnExcelController = async (req, res) => {
         })
 
     } catch (error) {
-        console.log(error,"error>>>>>>>>>>")
+      
         res.send({ statusCode: 500, result: [], status: 'Failure', message: 'internal server error' });
     }
 

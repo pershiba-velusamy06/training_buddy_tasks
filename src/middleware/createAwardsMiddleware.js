@@ -10,7 +10,7 @@ const validateAwards = ajv.compile(awardsSchema);
 export const awardsValidationMiddleware = (req, res, next) => {
     const valid = validateAwards(req.body);
     if (!valid) {
-        console.log(validateAwards.errors,"validateAwards.errors")
+      
         const errors = validateAwards.errors.map(error => ({
             field:error?.keyword==="additionalProperties"?error?.params?.additionalProperty:
             error?.keyword==="required"?

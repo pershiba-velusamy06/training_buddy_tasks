@@ -9,7 +9,7 @@ export async function userSpecificAwardsController(req, res) {
         userSpecificAwardsDataChecker(req, res).then((response) => {
             if (Array.isArray(response)) {
                 if (response) {
-                   
+                  
                     return res.send({
                         statusCode: 200,
                         result: response[0].awardsList,

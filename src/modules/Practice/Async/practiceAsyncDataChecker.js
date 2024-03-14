@@ -17,7 +17,7 @@ export const practiceAsyncDataChecker = (freq, res) => {
             return { awards: response[0].value, users: response[1].value, someAwards: response[2].value }
         })
     } catch (error) {
-        console.log(error)
+       
         throw Error('Internal server Error')
     }
 

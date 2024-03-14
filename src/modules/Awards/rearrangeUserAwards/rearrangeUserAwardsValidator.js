@@ -5,7 +5,7 @@ export const rearrangeUserAwardsValidator = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let AwardsList = await Awards.findOneAndUpdate({ _id: data.awardId }, data, { new: true })
-            // console.log(AwardsList,"AwardsList")
+
             if (AwardsList) {
                 const responseObject = {
                     awardId: AwardsList._id,
@@ -18,12 +18,10 @@ export const rearrangeUserAwardsValidator = (data) => {
                     pinSequence: AwardsList.pinSequence
                 };
                 resolve(responseObject)
-            }else{
+            } else {
                 resolve(null)
             }
         } catch (error) {
-           
-            console.log(error,"error>>>>>>>>>>><<<<<<<<<<<<<<<<<<")
             reject(error)
         }
     })

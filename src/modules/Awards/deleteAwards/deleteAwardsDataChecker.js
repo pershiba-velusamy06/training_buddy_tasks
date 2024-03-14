@@ -2,19 +2,7 @@ import { successMessage } from "../../../utils/Awards/awardsConstants.js";
 import { deleteAwardsDao, findAwardsExsistingUser, removeAwardsFromUser } from "./deleteAwardsValidator.js";
 import  jwt  from "jsonwebtoken";
 export const deleteAwardsDataChecker = async (req, res) => {
-    try {
-
-        if (req.body.awards.length === 0) {
-          
-            return  "awards should be an array containing at least one value"
-        }
-    
-        if (!Array.isArray(req.body.awards)) {
-          
-            return  "Awards should be an array"
-
-        }
-    
+    try {    
         let bearerAuth = req.headers.authorization
         let auth = bearerAuth.replace("Bearer ", "");
 

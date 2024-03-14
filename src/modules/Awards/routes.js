@@ -9,6 +9,7 @@ import { rearrangeUserAwardsControllers } from './rearrangeUserAwards/rearrangeU
 import { awardsValidationMiddleware } from '../../middleware/createAwardsMiddleware.js';
 import { editAwardsValidationMiddleware } from '../../middleware/editAwardsMiddleware.js';
 import { userSpecificAwardsMiddleware } from '../../middleware/userSpecificAwardsMiddleware.js';
+import { deleteAwardsMiddleware } from '../../middleware/deleteAwardsMiddleware.js';
 
 const awardsRoutes = express.Router();
 
@@ -22,7 +23,7 @@ awardsRoutes.post(AwardsHelper.viewUserAwards, userSpecificAwardsMiddleware, asy
     return await userSpecificAwardsController(req, res);
 });
 
-awardsRoutes.delete(AwardsHelper.deleteUserAwards, awardsAuthMiddleware, async (req, res) => {
+awardsRoutes.delete(AwardsHelper.deleteUserAwards, deleteAwardsMiddleware, async (req, res) => {
     return await deleteAwardsControllers(req, res);
 });
 

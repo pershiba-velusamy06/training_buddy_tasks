@@ -7,13 +7,14 @@ import { userSpecificAwardsController } from './userSpecificAwards/userSpecificA
 import { deleteAwardsControllers } from './deleteAwards/deleteAwardsControllers.js';
 import { rearrangeUserAwardsControllers } from './rearrangeUserAwards/rearrangeUserAwardsControllers.js';
 import { awardsValidationMiddleware } from '../../middleware/createAwardsMiddleware.js';
+import { editAwardsValidationMiddleware } from '../../middleware/editAwardsMiddleware.js';
 
 const awardsRoutes = express.Router();
 
 awardsRoutes.post(AwardsHelper.addUserAwards, awardsValidationMiddleware, async (req, res, next) => {
     return await createAwardsController(req, res, next);
 });
-awardsRoutes.patch(AwardsHelper.editUserAwards, awardsAuthMiddleware, async (req, res, next) => {
+awardsRoutes.patch(AwardsHelper.editUserAwards, editAwardsValidationMiddleware, async (req, res, next) => {
     return await editAwardsController(req, res, next);
 });
 awardsRoutes.post(AwardsHelper.viewUserAwards, awardsAuthWithUsercodeMiddleWare, async (req, res) => {

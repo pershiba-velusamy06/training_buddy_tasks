@@ -10,6 +10,7 @@ import { awardsValidationMiddleware } from '../../middleware/createAwardsMiddlew
 import { editAwardsValidationMiddleware } from '../../middleware/editAwardsMiddleware.js';
 import { userSpecificAwardsMiddleware } from '../../middleware/userSpecificAwardsMiddleware.js';
 import { deleteAwardsMiddleware } from '../../middleware/deleteAwardsMiddleware.js';
+import { rearrangeAwardsValidationMiddleware } from '../../middleware/rearrangeAwardsMiddleware.js';
 
 const awardsRoutes = express.Router();
 
@@ -27,7 +28,7 @@ awardsRoutes.delete(AwardsHelper.deleteUserAwards, deleteAwardsMiddleware, async
     return await deleteAwardsControllers(req, res);
 });
 
-awardsRoutes.patch('/rearrangeUserAwards', awardsAuthMiddleware, async (req, res) => {
+awardsRoutes.patch('/rearrangeUserAwards', rearrangeAwardsValidationMiddleware, async (req, res) => {
     return await rearrangeUserAwardsControllers(req, res)
 })
 

@@ -11,15 +11,7 @@ export const rearrangeUserAwardsDataChecker = async (req, res) => {
         let auth = bearerAuth.replace("Bearer ", "");
         const decoded = jwt.verify(auth, "elred");
         let phoneNumber = decoded.phoneNumber
-        if (!req.body.awards) {
-            return "Invalid input fields: awards array is required."
-        }
-        if (!Array.isArray(req.body.awards)) {
-            return "awards should be an Array."
-        }
-        if (req.body.awards.length === 0) {
-            return "awards should contain at least one object."
-        }
+       
         const awardIdsSet = [];
         let pinnedAwardsCount = 0;
         for (const award of req.body.awards) {

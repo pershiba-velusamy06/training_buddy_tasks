@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import 'dotenv/config'; 
 import request from 'supertest';
 import express from 'express';
-//import userRoutes from './src/modules/Users/userRoutes';
 import rootRouter from './src/combineRoutes';
 
 const MongoDbString = process.env.MONGODBSTRING;
@@ -415,5 +414,116 @@ describe('Awards Routes - Edit', () => {
     expect(response.body).toHaveProperty('isAuth', false);
     expect(response.body).toHaveProperty('errorCode', -1);
     expect(response.body).toHaveProperty('message', 'User not authorized');
+  }, 60000);
+});
+
+
+
+describe('Awards Routes - View User Awards', () => {
+  it('should return success response for valid user and parameters', async () => {
+    const validViewAwardsData = {
+      usercode: '65eef4d347b0156efb1d08e4', 
+    };
+    const queryParams = {
+      start: 0,
+      offset: 10
+    };
+
+    const response = await request(app)
+      .post('/viewUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .query(queryParams)
+      .send(validViewAwardsData);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('result');
+    expect(response.body).toHaveProperty('totalAwardsCount');
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('message');
+  }, 60000);
+  it('should return error response for invalid user', async () => {
+    const validViewAwardsData = {
+      usercode: '65eef4d347b0156efb1d08e5', 
+    };
+    const queryParams = {
+      start: 0,
+      offset: 10
+    };
+
+    const response = await request(app)
+      .post('/viewUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .query(queryParams)
+      .send(validViewAwardsData);
+
+    expect(response.statusCode).toBe(200);
+  
+    expect(response.body).toHaveProperty('result');
+    expect(response.body).toHaveProperty('totalAwardsCount',0);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('message');
+  }, 60000);
+
+  it('should return error response for missing usercode', async () => {
+    const invalidViewAwardsData = {
+      usercode: '', 
+    };
+    const queryParams = {
+      start: 0,
+      offset: 10
+    };
+
+    const response = await request(app)
+      .post('/viewUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .query(queryParams)
+      .send(invalidViewAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'usercode should not be empty string');
+  }, 60000);
+  it('should return error response for missing usercode', async () => {
+    const invalidViewAwardsData = {
+      usercode: '65eef4d347b0156efb1d08e4', 
+    };
+    const queryParams = {
+      start: 0,
+      offset: 10
+    };
+
+    const response = await request(app)
+      .post('/viewUserAwards')
+      .query(queryParams)
+      .send(invalidViewAwardsData);
+
+      expect(response.statusCode).toBe(500);
+      expect(response.body).toHaveProperty('success', false);
+      expect(response.body).toHaveProperty('isAuth', false);
+      expect(response.body).toHaveProperty('errorCode', -1);
+      expect(response.body).toHaveProperty('message', 'User not authorized');
+  }, 60000);
+
+  it('should return error response for invalid query parameters', async () => {
+    const validViewAwardsData = {
+      usercode: '65eef4d347b0156efb1d08e4', 
+    };
+    const queryParams = {
+      start: 0,
+      offset: 10,
+      invalidParam: 'invalid' 
+    };
+
+    const response = await request(app)
+      .post('/viewUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') // Set your authorization token here
+      .query(queryParams)
+      .send(validViewAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'Extra query parameters found: invalidParam.');
   }, 60000);
 });

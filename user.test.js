@@ -15,10 +15,11 @@ db.once('open', () => {
   console.log('Connected to MongoDB');
 });
 
-
 const app = express();
 app.use(express.json());
 app.use('/', rootRouter);
+
+// sign up api 
 
 describe('User Routes', () => {
   it('should return success response for valid user signup data', async () => {
@@ -137,6 +138,7 @@ describe('User Routes', () => {
   }, 60000);
 });
 
+// create awards
 
 describe('Awards Routes', () => {
   it('should return success response for valid awards data', async () => {
@@ -238,7 +240,7 @@ describe('Awards Routes', () => {
   }, 60000);
 });
 
-
+// Edit awards
 
 describe('Awards Routes - Edit', () => {
 
@@ -420,12 +422,9 @@ describe('Awards Routes - Edit', () => {
   }, 60000);
 });
 
+// view user specific awards list
 
-
-
-
-
-describe('Awards Routes - View User Awards', () => {
+describe('Awards Routes - View User Awards List', () => {
   it('should return success response for valid user and parameters', async () => {
     const validViewAwardsData = {
       usercode: '65eef4d347b0156efb1d08e4', 
@@ -534,8 +533,7 @@ describe('Awards Routes - View User Awards', () => {
   }, 60000);
 });
 
-
-
+// Delete awards api
 
 describe('Awards Routes - Delete User Awards', () => {
   it('should return success response for valid awards deletion', async () => {
@@ -614,5 +612,126 @@ describe('Awards Routes - Delete User Awards', () => {
     expect(response.body).toHaveProperty('errors');
     expect(response.body.errors.length).toBeGreaterThan(0);
   }, 60000);
+});
+
+// Rearrange user awards api
+
+describe('Awards Routes - Rearrange User Awards', () => {
+  it('should return success response for valid rearrangement', async () => {
+    const validUserAwards = {
+      awards: [
+        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "pinned", pinSequence: 1 },
+        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+      ]
+    };
+
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(validUserAwards);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('message', 'Updated User Awards Successfully');
+    expect(response.body.result.length).toBeGreaterThan(0);
+  });
+
+  it('should return error response for missing authorization token', async () => {
+    const validUserAwards = {
+      awards: [
+        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "pinned", pinSequence: 1 },
+        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+      ]
+    };
+
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .send(validUserAwards);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'User not authorized');
+  });
+
+  it('should return error response for invalid rearrangement data', async () => {
+    const invalidUserAwards = {
+      awards: [
+        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "invalidStatus", pinSequence: 1 },
+        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+      ]
+    };
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(invalidUserAwards);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  });
+  it('should return error response for invalid rearrangement data', async () => {
+    const invalidUserAwards = {
+      awards: [
+        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "hidden", pinSequence: 0 },
+        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: -1 }
+      ]
+    };
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(invalidUserAwards);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message');
+
+  });
+
+  it('should return error response for invalid rearrangement data', async () => {
+    const invalidUserAwards = {
+      awards: [
+        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "invalidStatus", pinSequence: 1 },
+        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+      ],
+      invalid:"invalid"
+    };
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(invalidUserAwards);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  });
+
+
+  it('should return error response for invalid rearrangement data', async () => {
+    const invalidUserAwards = {
+      awards: []
+    };
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(invalidUserAwards);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  });
+  it('should return error response for invalid rearrangement data', async () => {
+    const invalidUserAwards = {
+    };
+
+    const response = await request(app)
+      .patch('/rearrangeUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(invalidUserAwards);
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  });
+
 });
 

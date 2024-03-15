@@ -150,7 +150,7 @@ describe('Awards Routes', () => {
 
     const response = await request(app)
       .post('/addUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') // Set your authorization token here
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
       .send(validAwardsData);
 
     expect(response.statusCode).toBe(200);
@@ -230,6 +230,185 @@ describe('Awards Routes', () => {
     const response = await request(app)
       .post('/addUserAwards')
       .send(validAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message', 'User not authorized');
+  }, 60000);
+});
+
+
+
+describe('Awards Routes - Edit', () => {
+  it('should return success response for valid edit awards data', async () => {
+    const validEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .send(validEditAwardsData);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('Result');
+    expect(response.body.Result.length).toBeGreaterThan(0);
+  }, 60000);
+
+  it('should return error response for invalid edit awards data', async () => {
+    const invalidEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c895', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .send(invalidEditAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message');
+
+  }, 60000);
+  it('should return error response for invalid edit awards data', async () => {
+    const invalidEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: -1
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .send(invalidEditAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message');
+
+  }, 60000);
+  it('should return error response for invalid edit awards data', async () => {
+    const invalidEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpin',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .send(invalidEditAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message');
+
+  }, 60000);
+  it('should return error response for invalid edit awards data', async () => {
+    const invalidEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'pinned',
+      pinSequence: 12
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .send(invalidEditAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message');
+
+  }, 60000);
+
+
+
+  it('should return error response for invalid edit awards data', async () => {
+    const invalidEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894',
+      awardTitle: '',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .send(invalidEditAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+
+
+
+
+
+  it('should return error response for missing authorization token', async () => {
+    const validEditAwardsData = {
+      awardId: '65eefbaeb43a554aafd2c894', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .send(validEditAwardsData);
 
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);

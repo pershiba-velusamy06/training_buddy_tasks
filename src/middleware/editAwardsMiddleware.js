@@ -24,16 +24,16 @@ export const editAwardsValidationMiddleware = (req, res, next) => {
     const { awardId, pinStatus, pinSequence } = req.body;
 
     if (!["hidden", "unpinned", "pinned"].includes(pinStatus)) {
-        return res.status(500).json({ success: false, isAuth: false, message: `Invalid pinStatus value for awardId ${awardId}` });
+        return res.status(500).json({ success: false,  errorCode: -1, isAuth: false, message: `Invalid pinStatus value for awardId ${awardId}` });
     }
 
     const parsedPinSequence = parseInt(pinSequence);
     if (isNaN(parsedPinSequence) || parsedPinSequence < -1 || parsedPinSequence > 10) {
-        return res.status(500).json({ success: false, isAuth: false, message: `Invalid pinSequence for awardId ${awardId}. pinSequence should be a number from -1 to 10.` });
+        return res.status(500).json({ success: false, errorCode: -1, isAuth: false, message: `Invalid pinSequence for awardId ${awardId}. pinSequence should be a number from -1 to 10.` });
     }
 
     if ((parsedPinSequence !== 0 && pinStatus === "unpinned") || (parsedPinSequence !== -1 && pinStatus === "hidden")) {
-        return res.status(500).json({ success: false, isAuth: false, message: `Invalid combination of pinStatus and pinSequence for awardId ${awardId}.` });
+        return res.status(500).json({ success: false, errorCode: -1, isAuth: false, message: `Invalid combination of pinStatus and pinSequence for awardId ${awardId}.` });
     }
 
     if (!req.headers.authorization) {

@@ -35,7 +35,7 @@ export const deleteAwardsMiddleware = (req, res, next) => {
             success: false,
             isAuth: false,
             errorCode: -1,
-            error:[awardsError]
+            errors:[awardsError]
         });
     }
     next()

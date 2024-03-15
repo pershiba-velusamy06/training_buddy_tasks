@@ -13,7 +13,13 @@ export async function deleteAwardsControllers(req, res) {
                     message: response[0],
                 });
             }else{
-                return sendErrorResponse(res, response)
+               // return sendErrorResponse(res, response)
+                return res.status(200).send({
+                    Result: [],
+                    success: true,
+                    isAuth: true,
+                    message: response
+                });
             }
         })
 

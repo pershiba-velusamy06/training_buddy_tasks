@@ -149,7 +149,7 @@ describe('Awards Routes', () => {
 
     const response = await request(app)
       .post('/addUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(validAwardsData);
 
     expect(response.statusCode).toBe(200);
@@ -169,7 +169,7 @@ describe('Awards Routes', () => {
   
     const response = await request(app)
       .post('/addUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
   
 
@@ -188,7 +188,7 @@ describe('Awards Routes', () => {
   
     const response = await request(app)
       .post('/addUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
   
 
@@ -208,7 +208,7 @@ describe('Awards Routes', () => {
   
     const response = await request(app)
       .post('/addUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
   
 
@@ -241,29 +241,6 @@ describe('Awards Routes', () => {
 
 
 describe('Awards Routes - Edit', () => {
-  it('should return success response for valid edit awards data', async () => {
-    const validEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894', 
-      awardTitle: 'Updated Award Title',
-      description: 'Updated description',
-      issuedBy: 'Updated Issuer',
-      issuedDate: '15/03/2024',
-      approvalStatus: 'accepted',
-      pinStatus: 'unpinned',
-      pinSequence: 0
-    };
-
-    const response = await request(app)
-      .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
-      .send(validEditAwardsData);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('Result');
-    expect(response.body.Result.length).toBeGreaterThan(0);
-  }, 60000);
 
   it('should return error response for invalid edit awards data', async () => {
     const invalidEditAwardsData = {
@@ -279,7 +256,7 @@ describe('Awards Routes - Edit', () => {
 
     const response = await request(app)
       .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
       .send(invalidEditAwardsData);
 
     expect(response.statusCode).toBe(500);
@@ -289,9 +266,35 @@ describe('Awards Routes - Edit', () => {
     expect(response.body).toHaveProperty('message');
 
   }, 60000);
+  it('should return success response for valid edit awards data', async () => {
+    const validEditAwardsData = {
+      awardId: '65eefc1cb43a554aafd2c89f', 
+      awardTitle: 'Updated Award Title',
+      description: 'Updated description',
+      issuedBy: 'Updated Issuer',
+      issuedDate: '15/03/2024',
+      approvalStatus: 'accepted',
+      pinStatus: 'unpinned',
+      pinSequence: 0
+    };
+
+    const response = await request(app)
+      .patch('/editUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
+      .send(validEditAwardsData);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('Result');
+    expect(response.body.Result.length).toBeGreaterThan(0);
+  }, 60000);
+
+  
+
   it('should return error response for invalid edit awards data', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894', 
+      awardId: '65eefc1cb43a554aafd2c89f', 
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -303,7 +306,7 @@ describe('Awards Routes - Edit', () => {
 
     const response = await request(app)
       .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
       .send(invalidEditAwardsData);
 
     expect(response.statusCode).toBe(500);
@@ -315,7 +318,7 @@ describe('Awards Routes - Edit', () => {
   }, 60000);
   it('should return error response for invalid edit awards data', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894', 
+      awardId: '65eefc1cb43a554aafd2c89f', 
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -327,7 +330,7 @@ describe('Awards Routes - Edit', () => {
 
     const response = await request(app)
       .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
       .send(invalidEditAwardsData);
 
     expect(response.statusCode).toBe(500);
@@ -339,7 +342,7 @@ describe('Awards Routes - Edit', () => {
   }, 60000);
   it('should return error response for invalid edit awards data', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894', 
+      awardId: '65eefc1cb43a554aafd2c89f', 
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -351,7 +354,7 @@ describe('Awards Routes - Edit', () => {
 
     const response = await request(app)
       .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') 
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
       .send(invalidEditAwardsData);
 
     expect(response.statusCode).toBe(500);
@@ -366,7 +369,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for invalid edit awards data', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894',
+      awardId: '65eefc1cb43a554aafd2c89f',
       awardTitle: '',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -378,7 +381,7 @@ describe('Awards Routes - Edit', () => {
 
     const response = await request(app)
       .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidEditAwardsData);
 
     expect(response.statusCode).toBe(500);
@@ -395,7 +398,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for missing authorization token', async () => {
     const validEditAwardsData = {
-      awardId: '65eefbaeb43a554aafd2c894', 
+      awardId: '65eefc1cb43a554aafd2c89f', 
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -419,6 +422,9 @@ describe('Awards Routes - Edit', () => {
 
 
 
+
+
+
 describe('Awards Routes - View User Awards', () => {
   it('should return success response for valid user and parameters', async () => {
     const validViewAwardsData = {
@@ -431,7 +437,7 @@ describe('Awards Routes - View User Awards', () => {
 
     const response = await request(app)
       .post('/viewUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .query(queryParams)
       .send(validViewAwardsData);
 
@@ -453,7 +459,7 @@ describe('Awards Routes - View User Awards', () => {
 
     const response = await request(app)
       .post('/viewUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .query(queryParams)
       .send(validViewAwardsData);
 
@@ -477,7 +483,7 @@ describe('Awards Routes - View User Awards', () => {
 
     const response = await request(app)
       .post('/viewUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .query(queryParams)
       .send(invalidViewAwardsData);
 
@@ -518,7 +524,7 @@ describe('Awards Routes - View User Awards', () => {
 
     const response = await request(app)
       .post('/viewUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') // Set your authorization token here
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .query(queryParams)
       .send(validViewAwardsData);
 
@@ -527,3 +533,86 @@ describe('Awards Routes - View User Awards', () => {
     expect(response.body).toHaveProperty('message', 'Extra query parameters found: invalidParam.');
   }, 60000);
 });
+
+
+
+
+describe('Awards Routes - Delete User Awards', () => {
+  it('should return success response for valid awards deletion', async () => {
+    const validAwardsToDelete = {
+      awards: ["65f003041ea36b47123ad212"] 
+    };
+
+    const response = await request(app)
+      .delete('/deleteUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .send(validAwardsToDelete);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('message', 'Awards Deleted Successfully.');
+  }, 60000);
+
+  it('should return error response for missing authorization token', async () => {
+    const validAwardsToDelete = {
+      awards: ["65f003041ea36b47123ad212"] 
+    };
+
+    const response = await request(app)
+      .delete('/deleteUserAwards')
+      .send(validAwardsToDelete);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('message', 'User not authorized');
+  }, 60000);
+
+  it('should return error response for invalid awards', async () => {
+    const invalidAwardsToDelete = {
+      awards: [""] 
+    };
+
+    const response = await request(app)
+      .delete('/deleteUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
+      .send(invalidAwardsToDelete);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid awards', async () => {
+    const invalidAwardsToDelete = {
+      awards: [""] ,
+      age:"dvsdfd"
+    };
+
+    const response = await request(app)
+      .delete('/deleteUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
+      .send(invalidAwardsToDelete);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid awards', async () => {
+    const invalidAwardsToDelete = {
+      awards: ""
+    };
+
+    const response = await request(app)
+      .delete('/deleteUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk') 
+      .send(invalidAwardsToDelete);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+});
+

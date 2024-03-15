@@ -11,7 +11,7 @@ export const userSpecificAwardsMiddleware = (req, res, next) => {
     const extraParams = Object.keys(req.query).filter(key => !allowedParams.includes(key));
     if (extraParams.length > 0) {
         const errorMessage = `Extra query parameters found: ${extraParams.join(', ')}.`;
-        return res.status(400).json({ success: false, message: errorMessage });
+        return res.status(500).json({ success: false, message: errorMessage });
     }
 
     const valid = validateAwards(req.body);

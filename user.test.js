@@ -2,7 +2,8 @@ import mongoose from 'mongoose';
 import 'dotenv/config'; 
 import request from 'supertest';
 import express from 'express';
-import userRoutes from './src/modules/Users/userRoutes';
+//import userRoutes from './src/modules/Users/userRoutes';
+import rootRouter from './src/combineRoutes';
 
 const MongoDbString = process.env.MONGODBSTRING;
 
@@ -18,15 +19,15 @@ db.once('open', () => {
 
 const app = express();
 app.use(express.json());
-app.use('/', userRoutes);
+app.use('/', rootRouter);
 
 describe('User Routes', () => {
   it('should return success response for valid user signup data', async () => {
     const validUserData = {
-      firstname: 'John',
-      lastname: 'Doe',
-      phoneNumber: '+911234567890',
-      email: 'john@example.com'
+      firstname: 'Pershiba',
+      lastname: 'Velusamy',
+      phoneNumber: '+919787546335', 
+      email: 'pershiba@elred.io'
     };
 
     const response = await request(app)
@@ -42,10 +43,68 @@ describe('User Routes', () => {
 
   it('should return error response for invalid user signup data', async () => {
     const invalidUserData = {
-      firstname: 'John',
-      lastname: 'Doe',
-      phoneNumber: '+911234', 
-      email: 'john@example.com'
+      firstname: 'Pershiba',
+      lastname: 'Velusamy',
+      phoneNumber: '+919787', 
+      email: 'pershiba@elred.io'
+    };
+
+    const response = await request(app)
+      .post('/userSignUp')
+      .send(invalidUserData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid user signup data', async () => {
+    const invalidUserData = {
+      firstname: 'Pershiba',
+      lastname: 'V',
+      phoneNumber: '+919787546335', 
+      email: 'pershiba@elred.io'
+    };
+
+    const response = await request(app)
+      .post('/userSignUp')
+      .send(invalidUserData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid user signup data', async () => {
+    const invalidUserData = {
+      firstname: 'Pershiba',
+      lastname: 'Velusamy',
+      phoneNumber: '+919787546335', 
+      email: 'pershiba@elred.io',
+      age:25
+    };
+
+    const response = await request(app)
+      .post('/userSignUp')
+      .send(invalidUserData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid user signup data', async () => {
+    const invalidUserData = {
+      firstname: 'Pershiba',
+      lastname: 'Velusamy',
+      phoneNumber: '+919787546335', 
+      email: 'pershibaelred.io'
     };
 
     const response = await request(app)
@@ -76,5 +135,106 @@ describe('User Routes', () => {
     expect(response.body).toHaveProperty('isAuth', false);
     expect(response.body).toHaveProperty('errorCode', -1);
     expect(response.body).toHaveProperty('message', 'This email is already in use with another phone number. Please enter the correct phone and email combination.');
+  }, 60000);
+});
+
+
+describe('Awards Routes', () => {
+  it('should return success response for valid awards data', async () => {
+    const validAwardsData = {
+      awardTitle: "Awards 12",
+      description: "sxcxcdscdvdsgdfgsdgds",
+      issuedBy: "xzcsccdscs cdfasfsfa",
+      issuedDate: "12/03/2024"
+    };
+
+    const response = await request(app)
+      .post('/addUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU') // Set your authorization token here
+      .send(validAwardsData);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('success', true);
+    expect(response.body).toHaveProperty('isAuth', true);
+    expect(response.body).toHaveProperty('Result');
+    expect(response.body.Result.length).toBeGreaterThan(0);
+  }, 60000);
+
+  it('should return error response for invalid awards data', async () => {
+    const invalidAwardsData = {
+      awardTitle: "",
+      description: "sxcxcdscdvdsgdfgsdgds",
+      issuedBy: "xzcsccdscs cdfasfsfa",
+      issuedDate: "12/03/2024"
+    };
+  
+    const response = await request(app)
+      .post('/addUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .send(invalidAwardsData);
+  
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid awards data', async () => {
+    const invalidAwardsData = {
+      awardTitle: "Awards",
+      description: "sxcxcdscdvdsgdfgsdgds",
+      issuedBy: "xzcsccdscs cdfasfsfa",
+      issuedDate: "cscscsdcsc"
+    };
+  
+    const response = await request(app)
+      .post('/addUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .send(invalidAwardsData);
+  
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  it('should return error response for invalid awards data', async () => {
+    const invalidAwardsData = {
+      awardTitle: "Awards",
+      description: "sxcxcdscdvdsgdfgsdgds",
+      issuedBy: "xzcsccdscs cdfasfsfa",
+      issuedDate: "11/03/2024",
+      test:"szdsada"
+    };
+  
+    const response = await request(app)
+      .post('/addUserAwards')
+      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTAxNjA1ODYsImV4cCI6MTcxMTAyNDU4Nn0.9ATQQCCm0oYqQ1UarAzEUPATo06wKwid91DA038R9GU')
+      .send(invalidAwardsData);
+  
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('errors');
+    expect(response.body.errors.length).toBeGreaterThan(0);
+  }, 60000);
+  
+  it('should return error response for missing authorization token', async () => {
+    const validAwardsData = {
+      awardTitle: 'Best Employee',
+      description: 'Employee of the month',
+      issuedBy: 'Company X',
+      issuedDate: '01/01/2024'
+    };
+
+    const response = await request(app)
+      .post('/addUserAwards')
+      .send(validAwardsData);
+
+    expect(response.statusCode).toBe(500);
+    expect(response.body).toHaveProperty('success', false);
+    expect(response.body).toHaveProperty('isAuth', false);
+    expect(response.body).toHaveProperty('errorCode', -1);
+    expect(response.body).toHaveProperty('message', 'User not authorized');
   }, 60000);
 });

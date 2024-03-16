@@ -67,7 +67,7 @@ describe('Awards Routes - Delete User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message','Awards array should not contain empty strings');
   });
   it('should return error response for invalid awards', async () => {
     const invalidAwardsToDelete = {
@@ -83,7 +83,7 @@ describe('Awards Routes - Delete User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message','must NOT have additional properties');
   });
   it('should return error response for invalid awards', async () => {
     const invalidAwardsToDelete = {
@@ -98,6 +98,6 @@ describe('Awards Routes - Delete User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message','must be array');
   });
 });

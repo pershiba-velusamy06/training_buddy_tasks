@@ -80,8 +80,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
       .send(invalidUserAwards);
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body).toHaveProperty('message', `Invalid pinStatus value for awardId ${invalidUserAwards.awards[0].awardId}`);
   });
 
 
@@ -98,7 +97,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
       .send(invalidUserAwards);
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('message',`Invalid combination of pinStatus and pinSequence for awardId ${invalidUserAwards.awards[0].awardId}.`);
 
   });
 
@@ -118,7 +117,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have additional properties")
   });
 
 
@@ -133,7 +132,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message',"Awards array cannot be empty.")
   });
   it('should return error response for missing params', async () => {
     const invalidUserAwards = {
@@ -146,7 +145,8 @@ describe('Awards Routes - Rearrange User Awards', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('success', false);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('message',"must have required property 'awards'")
+  
   });
 
 

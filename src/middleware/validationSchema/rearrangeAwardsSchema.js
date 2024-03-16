@@ -7,8 +7,8 @@ export const rearrangeAwardsschema = {
                 type: 'object',
                 properties: {
                     awardId: { type: 'string' },
-                    pinStatus: { type: 'string', enum: ['hidden', 'unpinned', 'pinned'] },
-                    pinSequence: { type: 'number', minimum: -1, maximum: 10 }
+                    pinStatus: { type: 'string' },
+                    pinSequence: { type: 'number' }
                 },
                 required: ['awardId', 'pinStatus', 'pinSequence'],
                 additionalProperties: false

@@ -23,7 +23,7 @@ export const rearrangeUserAwardsDataChecker = async (req, res) => {
             if (isNaN(pinSequence) || pinSequence < -1 || pinSequence > 10) {
                 return `Invalid pinSequence for awardId ${award.awardId}. pinSequence should be a number from -1 to 10.`
             }
-            if ((pinSequence !== 0 && award.pinStatus === "unpinned") || (pinSequence !== -1 && award.pinStatus === "hidden")) {
+            if ((pinSequence !== 0 && award.pinStatus === "unpinned") || (pinSequence !== -1 && award.pinStatus === "hidden")||((pinSequence<1) &&award.pinStatus==="pinned")) {
                 return `Invalid combination of pinStatus and pinSequence for awardId ${award.awardId}.`
             }
             if (awardIdsSet.includes(award.awardId)) {

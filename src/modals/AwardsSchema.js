@@ -7,7 +7,8 @@ const awardsschema = new Schema({
     issuedDate: { type: String, required: true },
     approvalStatus: { type: String, required: true },
     pinStatus: { type: String, required: true },
-    pinSequence:{type:String,required:true}
+    pinSequence:{type:String,required:true},
+    
 });
 
 const Awards = model('Awards', awardsschema);

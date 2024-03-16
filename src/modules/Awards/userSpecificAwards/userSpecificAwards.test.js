@@ -44,7 +44,7 @@ describe('Awards Routes - View User Awards List', () => {
     expect(response.body).toHaveProperty('totalAwardsCount');
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('message',"Awards Fetched Successfully.");
   });
   it('should return error response for invalid user', async () => {
     const validViewAwardsData = {
@@ -67,7 +67,7 @@ describe('Awards Routes - View User Awards List', () => {
     expect(response.body).toHaveProperty('totalAwardsCount',0);
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('message');
+    expect(response.body).toHaveProperty('message',"Awards Fetched Successfully.");
   });
 
   it('should return error response for missing usercode', async () => {

@@ -41,6 +41,7 @@ describe('Awards Routes', () => {
     expect(response.body).toHaveProperty('success', true);
     expect(response.body).toHaveProperty('isAuth', true);
     expect(response.body).toHaveProperty('Result');
+    expect(response.body).toHaveProperty('message',"User Created Award added Successfully.");
     expect(response.body.Result.length).toBeGreaterThan(0);
   });
 
@@ -61,7 +62,8 @@ describe('Awards Routes', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('errorCode', -1);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('field',"awardTitle");
+    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have fewer than 3 characters");
   });
 
   it('should return error response for invalid awards data', async () => {
@@ -81,7 +83,8 @@ describe('Awards Routes', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('errorCode', -1);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('field',"issuedDate");
+    expect(response.body.errors[0]).toHaveProperty('message',"Invalid format for issuedDate. It should be in the format dd/mm/yyyy.");
   });
 
   it('should return error response for invalid awards data', async () => {
@@ -102,7 +105,9 @@ describe('Awards Routes', () => {
     expect(response.statusCode).toBe(500);
     expect(response.body).toHaveProperty('errorCode', -1);
     expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body.errors[0]).toHaveProperty('field',"test");
+    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have additional properties");
+
   });
   
   it('should return error response for missing authorization token', async () => {

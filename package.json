@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "jest  --detectOpenHandles",
+    "test": "jest --runInBand  --detectOpenHandles",
     ".": "nodemon ./src/index.js",
     "start": "node ./src/index.js"
   },
@@ -31,6 +31,7 @@
     "@babel/register": "^7.23.7",
     "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.1.7",
     "nodemon": "^3.1.0",
     "supertest": "^6.3.4"
   }

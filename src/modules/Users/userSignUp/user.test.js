@@ -1,30 +1,44 @@
 import mongoose from 'mongoose';
-import 'dotenv/config'; 
+import 'dotenv/config';
 import request from 'supertest';
 import express from 'express';
 import userRoutes from '../userRoutes';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import userInfo from '../../../modals/UserSchema';
 
-const MongoDbString = process.env.MONGODBSTRING;
+let mongoServer;
+let createdUserId;
+let app;
+let userData={
+  firstname: 'Pershiba',
+  lastname: 'Velusamy',
+  phoneNumber: '+919787546335',
+  email: 'pershiba@elred.io'
+}
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  mongoose.connect(mongoUri);
+   app = express();
+  app.use(express.json());
+  app.use('/', userRoutes);
+  const newUser = await userInfo.create(userData);
+  createdUserId = newUser._id;
+},100000);
 
-mongoose.connect(MongoDbString);
+afterAll(async () => {
+  await userInfo.findByIdAndDelete(createdUserId);
+  await mongoose.disconnect();
+  await mongoServer.stop();
+},100000);
 
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-const app = express();
-app.use(express.json());
-app.use('/', userRoutes);
 
 describe('User Routes', () => {
   it('should return success response for valid user signup data', async () => {
     const validUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
-      phoneNumber: '+919787546335', 
+      phoneNumber: '+919787546335',
       email: 'pershiba@elred.io'
     };
 
@@ -36,7 +50,7 @@ describe('User Routes', () => {
     expect(response.body).toStrictEqual({
       success: true,
       isAuth: false,
-      Result:  expect.arrayContaining([
+      Result: expect.arrayContaining([
         expect.objectContaining({
           accessToken: expect.any(String),
           expiryTime: expect.any(String),
@@ -52,7 +66,7 @@ describe('User Routes', () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
-      phoneNumber: '+919787', 
+      phoneNumber: '+919787',
       email: 'pershiba@elred.io'
     };
 
@@ -78,7 +92,7 @@ describe('User Routes', () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'V',
-      phoneNumber: '+919787546335', 
+      phoneNumber: '+919787546335',
       email: 'pershiba@elred.io'
     };
 
@@ -103,7 +117,7 @@ describe('User Routes', () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
-      phoneNumber: '+919787546335', 
+      phoneNumber: '+919787546335',
       email: 'pershiba@elred.io',
       age: 25
     };
@@ -129,7 +143,7 @@ describe('User Routes', () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
-      phoneNumber: '+919787546335', 
+      phoneNumber: '+919787546335',
       email: 'pershibaelred.io'
     };
 
@@ -166,7 +180,7 @@ describe('User Routes', () => {
       isAuth: false,
       errorCode: -1,
       message: 'This email is already in use with another phone number. Please enter the correct phone and email combination.',
-      result:expect.arrayContaining([])
+      result: expect.arrayContaining([])
     });
   });
 

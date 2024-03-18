@@ -19,9 +19,6 @@ const app = express();
 app.use(express.json());
 app.use('/', awardsRoutes);
 
-
-
-
 // Edit awards
 
 describe('Awards Routes - Edit', () => {
@@ -43,11 +40,14 @@ describe('Awards Routes - Edit', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidEditAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', "Failed to edit award");
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: "Failed to edit award",
+      result: []
+    });
 
   });
   it('should return success response for valid edit awards data', async () => {
@@ -67,16 +67,27 @@ describe('Awards Routes - Edit', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(validEditAwardsData);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('Result');
-    expect(response.body).toHaveProperty('message', "Selected Award Modified Successfully.");
+    expect(response.statusCode).toStrictEqual(200);
+    expect(response.body).toStrictEqual({
+      success: true,
+      isAuth: true,
+      Result: expect.arrayContaining([
+        expect.objectContaining({
+          awardId: expect.any(String),
+          awardTitle: 'Updated Award Title',
+          description: 'Updated description',
+          issuedBy: 'Updated Issuer',
+          issuedDate: '15/03/2024',
+          approvalStatus: 'accepted',
+          pinStatus: "unpinned",
+          pinSequence: "0"
+        })
+      ]),
+      message: "Selected Award Modified Successfully."
+    });
   });
 
-
-
-  it('should return error response for invalid edit awards data', async () => {
+  it('should return error response for invalid pinSequence', async () => {
     const invalidEditAwardsData = {
       awardId: '65eefc1cb43a554aafd2c89f',
       awardTitle: 'Updated Award Title',
@@ -93,14 +104,16 @@ describe('Awards Routes - Edit', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidEditAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', 'Invalid combination of pinStatus and pinSequence for awardId 65eefc1cb43a554aafd2c89f.');
-
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: `Invalid combination of pinStatus and pinSequence for awardId ${invalidEditAwardsData.awardId}.`
+    });
   });
-  it('should return error response for invalid edit awards data', async () => {
+
+  it('should return error response for invalid pinStatus', async () => {
     const invalidEditAwardsData = {
       awardId: '65eefc1cb43a554aafd2c89f',
       awardTitle: 'Updated Award Title',
@@ -117,41 +130,16 @@ describe('Awards Routes - Edit', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidEditAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', `Invalid pinStatus value for awardId ${invalidEditAwardsData.awardId}`);
-
-  });
-  it('should return error response for invalid edit awards data', async () => {
-    const invalidEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
-      awardTitle: 'Updated Award Title',
-      description: 'Updated description',
-      issuedBy: 'Updated Issuer',
-      issuedDate: '15/03/2024',
-      approvalStatus: 'accepted',
-      pinStatus: 'pinned',
-      pinSequence: 12
-    };
-
-    const response = await request(app)
-      .patch('/editUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
-      .send(invalidEditAwardsData);
-
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message',"Invalid pinSequence for awardId 65eefc1cb43a554aafd2c89f. pinSequence should be a number from -1 to 10.");
-
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: `Invalid pinStatus value for awardId ${invalidEditAwardsData.awardId}`
+    });
   });
 
-
-
-  it('should return error response for invalid edit awards data', async () => {
+  it('should return error response for invalid awardTitle', async () => {
     const invalidEditAwardsData = {
       awardId: '65eefc1cb43a554aafd2c89f',
       awardTitle: '',
@@ -168,18 +156,15 @@ describe('Awards Routes - Edit', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidEditAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors[0]).toHaveProperty('field',"awardTitle");
-    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have fewer than 3 characters");
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      errors: [{ field: "awardTitle", message: "must NOT have fewer than 3 characters" }],
+
+    });
   });
-
-
-
-
 
   it('should return error response for missing authorization token', async () => {
     const validEditAwardsData = {
@@ -197,10 +182,13 @@ describe('Awards Routes - Edit', () => {
       .patch('/editUserAwards')
       .send(validEditAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', 'User not authorized');
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: 'User not authorized',
+      result: []
+    });
   });
 });

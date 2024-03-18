@@ -1,8 +1,8 @@
-import awardsRoutes from "../routes";
 import mongoose from 'mongoose';
 import 'dotenv/config'; 
 import request from 'supertest';
 import express from 'express';
+import awardsRoutes from '../routes';
 
 const MongoDbString = process.env.MONGODBSTRING;
 
@@ -18,8 +18,6 @@ db.once('open', () => {
 const app = express();
 app.use(express.json());
 app.use('/', awardsRoutes);
-
-
 
 // view user specific awards list
 
@@ -39,13 +37,16 @@ describe('Awards Routes - View User Awards List', () => {
       .query(queryParams)
       .send(validViewAwardsData);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('result');
-    expect(response.body).toHaveProperty('totalAwardsCount');
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('message',"Awards Fetched Successfully.");
+    expect(response.statusCode).toStrictEqual(200);
+    expect(response.body).toStrictEqual({
+      result: expect.any(Array),
+      totalAwardsCount: expect.any(Number),
+      success: true,
+      isAuth: true,
+      message: "Awards Fetched Successfully."
+    });
   });
+
   it('should return error response for invalid user', async () => {
     const validViewAwardsData = {
       usercode: '65eef4d347b0156efb1d08e5', 
@@ -61,13 +62,14 @@ describe('Awards Routes - View User Awards List', () => {
       .query(queryParams)
       .send(validViewAwardsData);
 
-    expect(response.statusCode).toBe(200);
-  
-    expect(response.body).toHaveProperty('result');
-    expect(response.body).toHaveProperty('totalAwardsCount',0);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('message',"Awards Fetched Successfully.");
+    expect(response.statusCode).toStrictEqual(200);
+    expect(response.body).toStrictEqual({
+      result: [],
+      totalAwardsCount: 0,
+      success: true,
+      isAuth: true,
+      message: "Awards Fetched Successfully."
+    });
   });
 
   it('should return error response for missing usercode', async () => {
@@ -85,10 +87,17 @@ describe('Awards Routes - View User Awards List', () => {
       .query(queryParams)
       .send(invalidViewAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'usercode should not be empty string');
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      result: [],
+      message: 'usercode should not be empty string'
+    });
   });
+
   it('should return error response for missing usercode', async () => {
     const invalidViewAwardsData = {
       usercode: '65eef4d347b0156efb1d08e4'
@@ -103,11 +112,15 @@ describe('Awards Routes - View User Awards List', () => {
       .query(queryParams)
       .send(invalidViewAwardsData);
 
-      expect(response.statusCode).toBe(500);
-      expect(response.body).toHaveProperty('success', false);
-      expect(response.body).toHaveProperty('isAuth', false);
-      expect(response.body).toHaveProperty('errorCode', -1);
-      expect(response.body).toHaveProperty('message', 'User not authorized');
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      result: [],
+      message: 'User not authorized',
+
+    });
   });
 
   it('should return error response for invalid query parameters', async () => {
@@ -126,8 +139,10 @@ describe('Awards Routes - View User Awards List', () => {
       .query(queryParams)
       .send(validViewAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('message', 'Extra query parameters found: invalidParam.');
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      message: 'Extra query parameters found: invalidParam.'
+    });
   });
 });

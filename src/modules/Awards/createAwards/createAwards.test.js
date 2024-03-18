@@ -4,7 +4,6 @@ import request from 'supertest';
 import express from 'express';
 import awardsRoutes from '../routes';
 
-
 const MongoDbString = process.env.MONGODBSTRING;
 
 mongoose.connect(MongoDbString);
@@ -37,77 +36,107 @@ describe('Awards Routes', () => {
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(validAwardsData);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', true);
-    expect(response.body).toHaveProperty('Result');
-    expect(response.body).toHaveProperty('message',"User Created Award added Successfully.");
-    expect(response.body.Result.length).toBeGreaterThan(0);
+    expect(response.statusCode).toStrictEqual(200);
+    expect(response.body).toStrictEqual({
+      success: true,
+      isAuth: true,
+      Result: expect.arrayContaining([
+        expect.objectContaining({
+          awardId: expect.any(String),
+          awardTitle: "Awards 12",
+          description: "sxcxcdscdvdsgdfgsdgds",
+          issuedBy: "xzcsccdscs cdfasfsfa",
+          issuedDate: "12/03/2024",
+          approvalStatus: "accepted",
+          pinStatus: "unpinned",
+          pinSequence: "0"
+        })
+      ]),
+      message: "User Created Award added Successfully."
+    });
   });
 
-  it('should return error response for invalid awards data', async () => {
+  it('should return error response for invalid awards data (empty award title)', async () => {
     const invalidAwardsData = {
       awardTitle: "",
       description: "sxcxcdscdvdsgdfgsdgds",
       issuedBy: "xzcsccdscs cdfasfsfa",
       issuedDate: "12/03/2024"
     };
-  
+
     const response = await request(app)
       .post('/addUserAwards')
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
-  
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors[0]).toHaveProperty('field',"awardTitle");
-    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have fewer than 3 characters");
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      errorCode: -1,
+      success: false,
+      isAuth: false,
+      errors: [
+        expect.objectContaining({
+          field: "awardTitle",
+          message: "must NOT have fewer than 3 characters"
+        })
+      ]
+    });
   });
 
-  it('should return error response for invalid awards data', async () => {
+  it('should return error response for invalid awards data (invalid issued date)', async () => {
     const invalidAwardsData = {
       awardTitle: "Awards",
       description: "sxcxcdscdvdsgdfgsdgds",
       issuedBy: "xzcsccdscs cdfasfsfa",
       issuedDate: "cscscsdcsc"
     };
-  
+
     const response = await request(app)
       .post('/addUserAwards')
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
-  
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors[0]).toHaveProperty('field',"issuedDate");
-    expect(response.body.errors[0]).toHaveProperty('message',"Invalid format for issuedDate. It should be in the format dd/mm/yyyy.");
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      errorCode: -1,
+      success: false,
+      isAuth: false,
+      errors: [
+        expect.objectContaining( {
+          field: "issuedDate",
+          message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy."
+        })
+       
+      ]
+    });
   });
 
-  it('should return error response for invalid awards data', async () => {
+  it('should return error response for invalid awards data (additional field)', async () => {
     const invalidAwardsData = {
       awardTitle: "Awards",
       description: "sxcxcdscdvdsgdfgsdgds",
       issuedBy: "xzcsccdscs cdfasfsfa",
       issuedDate: "11/03/2024",
-      test:"szdsada"
+      test: "szdsada"
     };
-  
+
     const response = await request(app)
       .post('/addUserAwards')
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
       .send(invalidAwardsData);
-  
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors[0]).toHaveProperty('field',"test");
-    expect(response.body.errors[0]).toHaveProperty('message',"must NOT have additional properties");
-
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      errorCode: -1,
+      success: false,
+      isAuth: false,
+      errors: [
+        {
+          field: "test",
+          message: "must NOT have additional properties"
+        }
+      ]
+    });
   });
   
   it('should return error response for missing authorization token', async () => {
@@ -122,10 +151,13 @@ describe('Awards Routes', () => {
       .post('/addUserAwards')
       .send(validAwardsData);
 
-    expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', 'User not authorized');
+    expect(response.statusCode).toStrictEqual(500);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: 'User not authorized',
+      result:expect.arrayContaining([])
+    });
   });
 });

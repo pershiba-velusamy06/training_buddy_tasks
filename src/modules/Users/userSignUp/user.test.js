@@ -2,7 +2,6 @@ import mongoose from 'mongoose';
 import 'dotenv/config'; 
 import request from 'supertest';
 import express from 'express';
-// import rootRouter from './src/combineRoutes';
 import userRoutes from '../userRoutes';
 
 const MongoDbString = process.env.MONGODBSTRING;
@@ -20,8 +19,6 @@ const app = express();
 app.use(express.json());
 app.use('/', userRoutes);
 
-// sign up api 
-
 describe('User Routes', () => {
   it('should return success response for valid user signup data', async () => {
     const validUserData = {
@@ -36,13 +33,22 @@ describe('User Routes', () => {
       .send(validUserData);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('success', true);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('Result');
-    expect(response.body.Result.length).toBeGreaterThan(0);
+    expect(response.body).toStrictEqual({
+      success: true,
+      isAuth: false,
+      Result:  expect.arrayContaining([
+        expect.objectContaining({
+          accessToken: expect.any(String),
+          expiryTime: expect.any(String),
+          email: 'pershiba@elred.io',
+          phoneNumber: '+919787546335'
+        })
+      ]),
+      message: "User authenticated successfully!"
+    });
   });
 
-  it('should return error response for invalid user signup data', async () => {
+  it('should return error response for invalid user signup data (invalid phone number)', async () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
@@ -55,13 +61,20 @@ describe('User Routes', () => {
       .send(invalidUserData);
 
     expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors[0]).toHaveProperty('message','Invalid phone number format. It should start with +91 and be 10 digits long.');
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      errors: [
+        expect.objectContaining({
+          field: "phoneNumber",
+          message: 'Invalid phone number format. It should start with +91 and be 10 digits long.'
+        })
+      ]
+    });
   });
-  it('should return error response for invalid user signup data', async () => {
+
+  it('should return error response for invalid user signup data (invalid last name)', async () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'V',
@@ -74,19 +87,25 @@ describe('User Routes', () => {
       .send(invalidUserData);
 
     expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      errors: [
+        expect.objectContaining({
+          field: "lastname",
+          message: 'Last name should be between 3 and 20 characters long.'
+        })]
+    });
   });
-  it('should return error response for invalid user signup data', async () => {
+
+  it('should return error response for invalid user signup data (additional field)', async () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
       phoneNumber: '+919787546335', 
       email: 'pershiba@elred.io',
-      age:25
+      age: 25
     };
 
     const response = await request(app)
@@ -94,13 +113,19 @@ describe('User Routes', () => {
       .send(invalidUserData);
 
     expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      errors: [
+        expect.objectContaining({
+          field: "age",
+          message: 'must NOT have additional properties'
+        })]
+    });
   });
-  it('should return error response for invalid user signup data', async () => {
+
+  it('should return error response for invalid user signup data (invalid email)', async () => {
     const invalidUserData = {
       firstname: 'Pershiba',
       lastname: 'Velusamy',
@@ -113,15 +138,19 @@ describe('User Routes', () => {
       .send(invalidUserData);
 
     expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('errors');
-    expect(response.body.errors.length).toBeGreaterThan(0);
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      errors: [
+        expect.objectContaining({
+          field: "email",
+          message: 'Invalid email format.'
+        })]
+    });
   });
 
   it('should return error response for existing email', async () => {
-   
     const response = await request(app)
       .post('/userSignUp')
       .send({
@@ -132,9 +161,15 @@ describe('User Routes', () => {
       });
 
     expect(response.statusCode).toBe(500);
-    expect(response.body).toHaveProperty('success', false);
-    expect(response.body).toHaveProperty('isAuth', false);
-    expect(response.body).toHaveProperty('errorCode', -1);
-    expect(response.body).toHaveProperty('message', 'This email is already in use with another phone number. Please enter the correct phone and email combination.');
+    expect(response.body).toStrictEqual({
+      success: false,
+      isAuth: false,
+      errorCode: -1,
+      message: 'This email is already in use with another phone number. Please enter the correct phone and email combination.',
+      result:expect.arrayContaining([])
+    });
   });
+
+
+
 });

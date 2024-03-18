@@ -1,9 +1,32 @@
 import jwt from 'jsonwebtoken';
 import { CreateAwardsValidator, updateAwardCreationinUser } from './createAwardsValidator.js';
 import multer from 'multer';
+import { validateAddUserAwards } from '../../../middleware/v2CreateAwardsMiddleAware.js';
 export const createAwardsDataCheckers = async (req, res) => {
 
     try {
+
+console.log(req.body,"req.body")
+        const valid = validateAddUserAwards(req.body);
+        if (!valid) {
+          console.log(validateAddUserAwards.errors,"validateAddUserAwards.errors")
+            const errors = validateAddUserAwards.errors.map(error => ({
+                field:error?.keyword==="additionalProperties"?error?.params?.additionalProperty:
+                error?.keyword==="required"?
+                error?.params?.missingProperty: error.instancePath.replace("/", ""),
+                message:error.keyword === 'pattern'?`Invalid format for issuedDate. It should be in the format dd/mm/yyyy.`: error.message,
+            }));
+            console.log(errors,"errors")
+            return errors[0]
+          
+        }
+        if (!req.headers.authorization) {
+         
+            return  {
+                message : "User not authorized"
+            }
+        }
+      
         let bearerAuth = req.headers.authorization
         let auth = bearerAuth.replace("Bearer ", "");
         const decoded = jwt.verify(auth, "elred");

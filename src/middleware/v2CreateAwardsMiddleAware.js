@@ -1,38 +1,12 @@
-
 import Ajv from 'ajv';
-
-
 import multer from 'multer';
+import { addUserAwardsSchema } from './validationSchema/v2AdduserSchema.js';
 
 
-// const ajv = new Ajv();
+const ajv = new Ajv();
 
 
-// const validateAddUserAwards = ajv.compile(addUserAwardsSchema);
-
-// export const v2awardsValidationMiddleware = (req, res, next) => {
-//     const valid = validateAddUserAwards(req.body);
-//     if (!valid) {
-      
-//         const errors = validateAwards.errors.map(error => ({
-//             field:error?.keyword==="additionalProperties"?error?.params?.additionalProperty:
-//             error?.keyword==="required"?
-//             error?.params?.missingProperty: error.instancePath.replace("/", ""),
-//             message:error.keyword === 'pattern'?`Invalid format for issuedDate. It should be in the format dd/mm/yyyy.`: error.message,
-//         }));
-//         return res.status(500).json({
-//             success: false,
-//             isAuth: false,
-//             errorCode: -1,
-//             errors
-//         });
-//     }
-//     if (!req.headers.authorization) {
-//         return sendErrorResponse(res,"User not authorized")
-//     }
-//     next();
-// };
-
+export const validateAddUserAwards = ajv.compile(addUserAwardsSchema);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -55,10 +29,32 @@ const fileFilter = (req, file, cb) => {
         cb(new Error('Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.'));
     }
 };
+
+
 export const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 10 * 1024 * 1024 
+        fileSize: 10 * 1024 * 1024
     },
     fileFilter: fileFilter
-});  
+}).single('awardCertificateURL');
+
+
+export const handleInvalidFileTypeError = (err, req, res, next) => {
+    if (err.message === 'Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.') {
+        return res.status(400).json({
+            success: false,
+            isAuth: false,
+            errorCode: -1,
+            message: 'Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.'
+        });
+    } else if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
+        return res.status(400).json({
+            success: false,
+            isAuth: false,
+            errorCode: -1,
+            message: 'File too large. Maximum file size allowed is 10MB.'
+        });
+    }
+    next(err);
+};

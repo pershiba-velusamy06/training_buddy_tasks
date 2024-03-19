@@ -3,28 +3,60 @@ import 'dotenv/config';
 import request from 'supertest';
 import express from 'express';
 import awardsRoutes from '../routes';
+import userInfo from '../../../modals/UserSchema';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import Awards from '../../../modals/AwardsSchema';
 
-const MongoDbString = process.env.MONGODBSTRING;
+let mongoServer;
+let createdUserId;
+let app;
+let awardsId;
+const validAwardsData = {
+  awardTitle: "Awards 12",
+  description: "sxcxcdscdvdsgdfgsdgds",
+  issuedBy: "xzcsccdscs cdfasfsfa",
+  issuedDate: "12/03/2024",
+  approvalStatus: "accepted",
+  pinStatus:"unpinned" ,
+  pinSequence:0
+};
 
-mongoose.connect(MongoDbString);
 
-const db = mongoose.connection;
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  mongoose.connect(mongoUri);
+  app = express();
+  app.use(express.json());
+  app.use('/', awardsRoutes);
+  const createAwards = await Awards.create(validAwardsData)
+ 
+  let userData = {
+    firstname: 'Pershiba',
+    lastname: 'Velusamy',
+    phoneNumber: '+919787546335',
+    email: 'pershiba@elred.io',
+    awards: [createAwards._id],
+  }
+  const newUser = await userInfo.create(userData);
+  createdUserId = newUser._id;
+  console.log(newUser.awards[0], "newUser.awards[0]")
+  awardsId = createAwards._id;
+}, 100000);
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-const app = express();
-app.use(express.json());
-app.use('/', awardsRoutes);
+afterAll(async () => {
+  await Awards.findByIdAndDelete(awardsId);
+  await userInfo.findByIdAndDelete(createdUserId);
+  await mongoose.disconnect();
+  await mongoServer.stop();
+}, 100000);
 
 // view user specific awards list
 
 describe('Awards Routes - View User Awards List', () => {
   it('should return success response for valid user and parameters', async () => {
     const validViewAwardsData = {
-      usercode: '65eef4d347b0156efb1d08e4', 
+      usercode: createdUserId, 
     };
     const queryParams = {
       start: 0,
@@ -98,9 +130,9 @@ describe('Awards Routes - View User Awards List', () => {
     });
   });
 
-  it('should return error response for missing usercode', async () => {
+  it('should return error response for missing AuthoriZation token', async () => {
     const invalidViewAwardsData = {
-      usercode: '65eef4d347b0156efb1d08e4'
+      usercode: createdUserId
     };
     const queryParams = {
       start: 0,
@@ -125,7 +157,7 @@ describe('Awards Routes - View User Awards List', () => {
 
   it('should return error response for invalid query parameters', async () => {
     const validViewAwardsData = {
-      usercode: '65eef4d347b0156efb1d08e4', 
+      usercode:createdUserId, 
     };
     const queryParams = {
       start: 0,

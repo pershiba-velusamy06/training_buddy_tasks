@@ -42,14 +42,14 @@ export const upload = multer({
 
 export const handleInvalidFileTypeError = (err, req, res, next) => {
     if (err.message === 'Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.') {
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
             isAuth: false,
             errorCode: -1,
             message: 'Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.'
         });
     } else if (err instanceof multer.MulterError && err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({
+        return res.status(500).json({
             success: false,
             isAuth: false,
             errorCode: -1,

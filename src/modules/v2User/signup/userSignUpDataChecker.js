@@ -2,7 +2,9 @@
 import { userSignUpValidator, userUpdateOtpValidator, userbyEmailforSignUpValidator } from "./userSignUpValidator.js";
 import jwt from 'jsonwebtoken';
 import sgMail from '@sendgrid/mail'
-sgMail.setApiKey('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');
+import 'dotenv/config'
+const SENDGRID = process.env.SENDGRID;
+sgMail.setApiKey(SENDGRID);
 
 export const userSignUpDataChecker = async (req, res) => {
     return new Promise(async (resolve, reject) => {

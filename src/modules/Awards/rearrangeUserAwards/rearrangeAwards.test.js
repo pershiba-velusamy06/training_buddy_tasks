@@ -5,20 +5,55 @@ import express from 'express';
 import awardsRoutes from '../routes';
 
 
-const MongoDbString = process.env.MONGODBSTRING;
+import userInfo from '../../../modals/UserSchema';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import Awards from '../../../modals/AwardsSchema';
 
-mongoose.connect(MongoDbString);
 
-const db = mongoose.connection;
+let mongoServer;
+let createdUserId;
+let app;
+let awardsId;
+const validAwardsData = {
+  awardTitle: "Awards 12",
+  description: "sxcxcdscdvdsgdfgsdgds",
+  issuedBy: "xzcsccdscs cdfasfsfa",
+  issuedDate: "12/03/2024",
+  approvalStatus: "accepted",
+  pinStatus:"unpinned" ,
+  pinSequence:0
+};
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
 
-const app = express();
-app.use(express.json());
-app.use('/', awardsRoutes);
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  mongoose.connect(mongoUri);
+  app = express();
+  app.use(express.json());
+  app.use('/', awardsRoutes);
+  const createAwards = await Awards.create(validAwardsData)
+ 
+  let userData = {
+    firstname: 'Pershiba',
+    lastname: 'Velusamy',
+    phoneNumber: '+919787546335',
+    email: 'pershiba@elred.io',
+    awards: [createAwards._id],
+  }
+  const newUser = await userInfo.create(userData);
+  createdUserId = newUser._id;
+  console.log(newUser.awards[0], "newUser.awards[0]")
+  awardsId = createAwards._id;
+}, 100000);
+
+afterAll(async () => {
+  await Awards.findByIdAndDelete(awardsId);
+  await userInfo.findByIdAndDelete(createdUserId);
+  await mongoose.disconnect();
+  await mongoServer.stop();
+}, 100000);
+
 
 
 
@@ -31,8 +66,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
   it('should return success response for valid rearrangement', async () => {
     const validUserAwards = {
       awards: [
-        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "pinned", pinSequence: 1 },
-        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+        { awardId: awardsId, pinStatus: "pinned", pinSequence: 1 }
       ]
     };
 
@@ -46,7 +80,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
       success: true,
       isAuth: true,
       message: 'Updated User Awards Successfully',
-      result: expect.any([
+      result: expect.arrayContaining([
         expect.objectContaining( {
           "awardId": expect.any(String),
           "awardTitle": expect.any(String),
@@ -56,8 +90,8 @@ describe('Awards Routes - Rearrange User Awards', () => {
           "approvalStatus":expect.any(String),
           "pinStatus": expect.any(String),
           "pinSequence":expect.any(String)
-      }),
-      expect.objectContaining(  {
+        }),
+        expect.objectContaining(  {
           "awardId": expect.any(String),
           "awardTitle": expect.any(String),
           "description":expect.any(String),
@@ -66,18 +100,17 @@ describe('Awards Routes - Rearrange User Awards', () => {
           "approvalStatus": expect.any(String),
           "pinStatus": expect.any(String),
           "pinSequence":expect.any(String)
-      })
-
+        })
       ])
     });
+    
   });
 
 
   it('should return error response for missing authorization token', async () => {
     const validUserAwards = {
       awards: [
-        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "pinned", pinSequence: 1 },
-        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+        { awardId:awardsId, pinStatus: "pinned", pinSequence: 1 }
       ]
     };
 
@@ -99,8 +132,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
   it('should return error response for invalid rearrangement data in pinStatus', async () => {
     const invalidUserAwards = {
       awards: [
-        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "invalidStatus", pinSequence: 1 },
-        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+        { awardId: awardsId, pinStatus: "invalidStatus", pinSequence: 1 }
       ]
     };
     const response = await request(app)
@@ -121,8 +153,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
   it('should return error response for missmatching pinStatus and pinSequence', async () => {
     const invalidUserAwards = {
       awards: [
-        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "hidden", pinSequence: 0 },
-        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: -1 }
+        { awardId: awardsId, pinStatus: "hidden", pinSequence: 0 }
       ]
     };
     const response = await request(app)
@@ -144,8 +175,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
   it('should return error response for invalid extra data passed', async () => {
     const invalidUserAwards = {
       awards: [
-        { awardId: "65eefc18b43a554aafd2c89c", pinStatus: "pinned", pinSequence: 1 },
-        { awardId: "65eefc1cb43a554aafd2c89f", pinStatus: "unpinned", pinSequence: 0 }
+        { awardId: awardsId, pinStatus: "pinned", pinSequence: 1 }
       ],
       invalid:"invalid"
     };

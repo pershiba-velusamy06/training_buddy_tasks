@@ -4,20 +4,7 @@ import request from 'supertest';
 import express from 'express';
 import awardsRoutes from '../routes';
 
-// const MongoDbString = process.env.MONGODBSTRING;
 
-// mongoose.connect(MongoDbString);
-
-// const db = mongoose.connection;
-
-// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-// db.once('open', () => {
-//   console.log('Connected to MongoDB');
-// });
-
-// const app = express();
-// app.use(express.json());
-// app.use('/', awardsRoutes);
 
 import userInfo from '../../../modals/UserSchema';
 import { MongoMemoryServer } from 'mongodb-memory-server';

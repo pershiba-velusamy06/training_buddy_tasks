@@ -17,6 +17,7 @@ export const rearrangeAwardsValidationMiddleware = (req, res, next) => {
             success: false,
             isAuth: false,
             errorCode: -1,
+            result:[],
             errors
         });
     }
@@ -26,6 +27,7 @@ export const rearrangeAwardsValidationMiddleware = (req, res, next) => {
             success: false,
             isAuth: false,
             errorCode: -1,
+            result:[],
             errors: [{ field: 'awards', message: 'Awards array cannot be empty.' }]
         });
     }

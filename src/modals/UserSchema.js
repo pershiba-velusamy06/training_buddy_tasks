@@ -7,7 +7,8 @@ import { Schema, model } from 'mongoose';
   email: { type: String, required: true },
   accessToken: { type: String },
   expiryTime: { type: String },
-  awards:{type:Array}
+  awards:{type:Array},
+  otp:{type:String}
 });
 
 const userInfo = model('userInfo', userschema);

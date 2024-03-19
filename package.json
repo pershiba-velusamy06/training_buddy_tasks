@@ -12,6 +12,7 @@
   "author": "pershiba velusamy",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^8.1.1",
     "ajv": "^8.12.0",
     "async": "^3.2.5",
     "aws-sdk": "^2.1576.0",

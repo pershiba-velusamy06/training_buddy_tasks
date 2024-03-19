@@ -1,5 +1,6 @@
 export const userHelpers = {
-    userSignUp: "/userSignUp"
+    userSignUp: "/userSignUp",
+    verifyOtp:"/verifyOtp"
 }
 
 export const AwardsHelper = {

@@ -4,20 +4,72 @@ import request from 'supertest';
 import express from 'express';
 import awardsRoutes from '../routes';
 
-const MongoDbString = process.env.MONGODBSTRING;
+// const MongoDbString = process.env.MONGODBSTRING;
 
-mongoose.connect(MongoDbString);
+// mongoose.connect(MongoDbString);
 
-const db = mongoose.connection;
+// const db = mongoose.connection;
 
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
+// db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// db.once('open', () => {
+//   console.log('Connected to MongoDB');
+// });
 
-const app = express();
-app.use(express.json());
-app.use('/', awardsRoutes);
+// const app = express();
+// app.use(express.json());
+// app.use('/', awardsRoutes);
+
+import userInfo from '../../../modals/UserSchema';
+import { MongoMemoryServer } from 'mongodb-memory-server';
+import Awards from '../../../modals/AwardsSchema';
+
+
+let mongoServer;
+let createdUserId;
+let app;
+let awardsId;
+const validAwardsData = {
+  awardTitle: "Awards 12",
+  description: "sxcxcdscdvdsgdfgsdgds",
+  issuedBy: "xzcsccdscs cdfasfsfa",
+  issuedDate: "12/03/2024",
+  approvalStatus: "accepted",
+  pinStatus:"unpinned" ,
+  pinSequence:0
+};
+
+
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  mongoose.connect(mongoUri);
+  app = express();
+  app.use(express.json());
+  app.use('/', awardsRoutes);
+  const createAwards = await Awards.create(validAwardsData)
+ 
+  let userData = {
+    firstname: 'Pershiba',
+    lastname: 'Velusamy',
+    phoneNumber: '+919787546335',
+    email: 'pershiba@elred.io',
+    awards: [createAwards._id],
+  }
+  const newUser = await userInfo.create(userData);
+  createdUserId = newUser._id;
+  console.log(newUser.awards[0], "newUser.awards[0]")
+  awardsId = createAwards._id;
+}, 100000);
+
+afterAll(async () => {
+  await Awards.findByIdAndDelete(awardsId);
+  await userInfo.findByIdAndDelete(createdUserId);
+  await mongoose.disconnect();
+  await mongoServer.stop();
+}, 100000);
+
+
+
 
 // Edit awards
 
@@ -52,7 +104,7 @@ describe('Awards Routes - Edit', () => {
   });
   it('should return success response for valid edit awards data', async () => {
     const validEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
+      awardId: awardsId,
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -89,7 +141,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for invalid pinSequence', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
+      awardId: awardsId,
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -115,7 +167,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for invalid pinStatus', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
+      awardId: awardsId,
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -141,7 +193,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for invalid awardTitle', async () => {
     const invalidEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
+      awardId: awardsId,
       awardTitle: '',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',
@@ -168,7 +220,7 @@ describe('Awards Routes - Edit', () => {
 
   it('should return error response for missing authorization token', async () => {
     const validEditAwardsData = {
-      awardId: '65eefc1cb43a554aafd2c89f',
+      awardId: awardsId,
       awardTitle: 'Updated Award Title',
       description: 'Updated description',
       issuedBy: 'Updated Issuer',

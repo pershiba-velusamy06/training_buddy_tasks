@@ -3,21 +3,35 @@ import 'dotenv/config';
 import request from 'supertest';
 import express from 'express';
 import awardsRoutes from '../routes';
+import userInfo from '../../../modals/UserSchema';
+import { MongoMemoryServer } from 'mongodb-memory-server';
 
-const MongoDbString = process.env.MONGODBSTRING;
 
-mongoose.connect(MongoDbString);
+let mongoServer;
+let createdUserId;
+let app;
+let userData={
+  firstname: 'Pershiba',
+  lastname: 'Velusamy',
+  phoneNumber: '+919787546335',
+  email: 'pershiba@elred.io'
+}
+beforeAll(async () => {
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
+  mongoose.connect(mongoUri);
+   app = express();
+  app.use(express.json());
+  app.use('/', awardsRoutes);
+  const newUser = await userInfo.create(userData);
+  createdUserId = newUser._id;
+},100000);
 
-const db = mongoose.connection;
-
-db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-db.once('open', () => {
-  console.log('Connected to MongoDB');
-});
-
-const app = express();
-app.use(express.json());
-app.use('/', awardsRoutes);
+afterAll(async () => {
+  await userInfo.findByIdAndDelete(createdUserId);
+  await mongoose.disconnect();
+  await mongoServer.stop();
+},100000);
 
 
 // create awards

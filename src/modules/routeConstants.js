@@ -8,3 +8,13 @@ export const AwardsHelper = {
     viewUserAwards: '/viewUserAwards',
     deleteUserAwards: "/deleteUserAwards"
 }
+
+export const PracticeHelper = {
+    practiceAsync: '/practiceAsync',
+    createExcel: '/createAnExcel',
+    readAnExcel: '/readExcel'
+}
+
+export const v2AwardsHelper = {
+    addUserAwards: '/addUserAwards',
+}

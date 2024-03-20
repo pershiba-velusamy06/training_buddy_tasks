@@ -8,7 +8,7 @@ const mongoServer = new MongoMemoryServer();
 
 export const dbConnect = async () => {
     const uri = await mongoServer.getUri();
-    console.log(uri, "uri")
+  
     const mongooseOpts = {
         useNewUrlParser: true,
         useCreateIndex: true

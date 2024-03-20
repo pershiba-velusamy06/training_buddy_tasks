@@ -28,14 +28,13 @@ export const userSignUpDataChecker = async (req, res) => {
                     .send(msg)
                     .then(async () => {
                         let updateOTP = await userUpdateOtpValidator({ phoneNumber: User.phoneNumber, otp: otp })
+                      
                         if (updateOTP) {
                             let userData = [{
                                 email: User.email,
                                 phoneNumber: User.phoneNumber
                             }];
-                            setTimeout(()=>{
-                                userUpdateOtpValidator({ phoneNumber: User.phoneNumber, otp: "" })
-                            },5*60*1000)
+                          
                             resolve(userData)
                         } else {
                             resolve(null)
@@ -43,7 +42,7 @@ export const userSignUpDataChecker = async (req, res) => {
 
                     })
                     .catch((error) => {
-                        console.log(error.toString())
+                      
                         reject(error)
                     });
 
@@ -51,7 +50,7 @@ export const userSignUpDataChecker = async (req, res) => {
             }
 
         } catch (error) {
-            console.log(error)
+          
             reject(error)
         }
     })

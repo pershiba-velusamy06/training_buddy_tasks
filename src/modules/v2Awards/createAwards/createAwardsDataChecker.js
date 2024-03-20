@@ -6,17 +6,17 @@ export const createAwardsDataCheckers = async (req, res) => {
 
     try {
 
-console.log(req.body,"req.body")
+
         const valid = validateAddUserAwards(req.body);
         if (!valid) {
-          console.log(validateAddUserAwards.errors,"validateAddUserAwards.errors")
+        
             const errors = validateAddUserAwards.errors.map(error => ({
                 field:error?.keyword==="additionalProperties"?error?.params?.additionalProperty:
                 error?.keyword==="required"?
                 error?.params?.missingProperty: error.instancePath.replace("/", ""),
                 message:error.keyword === 'pattern'?`Invalid format for issuedDate. It should be in the format dd/mm/yyyy.`: error.message,
             }));
-            console.log(errors,"errors")
+           
             return errors[0]
           
         }
@@ -41,7 +41,7 @@ console.log(req.body,"req.body")
         }
 
     } catch (err) {
-        console.log(err, "err")
+  
         throw Error('Internal server Error')
     }
 

@@ -7,6 +7,7 @@ export async function userSignUp(req, res) {
 
     try {
         await userSignUpDataChecker(req, res).then((response) => {
+         
             if(response){
                 res.status(200).send({
                     Result: response,

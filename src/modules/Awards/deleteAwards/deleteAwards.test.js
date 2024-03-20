@@ -44,7 +44,6 @@ beforeAll(async () => {
   }
   const newUser = await userInfo.create(userData);
   createdUserId = newUser._id;
-  console.log(newUser.awards[0], "newUser.awards[0]")
   awardsId = createAwards._id;
 }, 100000);
 

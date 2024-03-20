@@ -1,4 +1,5 @@
 import userInfo from "../../../modals/UserSchema.js";
+import { deleteKey } from "../../../utils/redisFunctions.js";
 
 
 
@@ -9,15 +10,15 @@ export const FetchOtp = async (data) => {
 
             const getUser = await userInfo.findOne({ phoneNumber: data.phoneNumber });
             if (getUser) {
-                const { email, firstName, lastName, phoneNumber, otp,_id } = getUser;
+              
+                const { email, firstname, lastname, phoneNumber, otp, _id } = getUser;
 
-             
+
                 const userData = {
                     email,
-                    firstName,
-                    lastName,
+                    firstname,
+                    lastname,
                     phoneNumber,
-                    otp,
                     _id
                 };
                 resolve(userData)
@@ -33,7 +34,7 @@ export const FetchOtp = async (data) => {
 export const userSignUpValidator = async (data) => {
 
     return new Promise(async (resolve, reject) => {
-        console.log(data,"data")
+       
         try {
 
             const existingUser = await userInfo.findOneAndUpdate(
@@ -41,8 +42,12 @@ export const userSignUpValidator = async (data) => {
                 data,
                 { new: true, upsert: true }
             );
+            let deleted = await deleteKey(data.phoneNumber)
+            
+            if (deleted) {
+                resolve(existingUser);
+            }
 
-            resolve(existingUser);
         } catch (error) {
             reject(error);
         }

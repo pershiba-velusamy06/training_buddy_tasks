@@ -16,9 +16,13 @@ export const userSignUpDataChecker = async (req, res) => {
                 const msg = {
                     to: User.email,
                     from: 'pershiba@elred.io', 
-                    subject: 'Sending with Twilio SendGrid is Fun',
-                    text: `Your OTP is ${otp}`,
-                    html: `<strong>Your OTP is ${otp}</strong>`
+                    templateId: 'd-d406ec55b7294702bda55ba3d9a33b91', // Replace this with your dynamic template ID
+                    dynamicTemplateData: {
+                        otp: otp
+                    },
+                     subject: 'Sign up request',
+                    // text: `Your OTP is ${otp}`,
+                    // html: `<strong>Your OTP is ${otp}</strong>`
                 };
                 sgMail
                     .send(msg)
@@ -39,6 +43,7 @@ export const userSignUpDataChecker = async (req, res) => {
 
                     })
                     .catch((error) => {
+                        console.log(error.toString())
                         reject(error)
                     });
 
@@ -46,6 +51,7 @@ export const userSignUpDataChecker = async (req, res) => {
             }
 
         } catch (error) {
+            console.log(error)
             reject(error)
         }
     })

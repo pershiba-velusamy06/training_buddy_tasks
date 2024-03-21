@@ -16,14 +16,17 @@ export async function userSignUp(req, res) {
                     message: successMessage.authenticationSuccess,
                 });
             }else{
+                console.log(response,"response")
                 res.send({ statusCode: 500, result: [], status: 'Failure', message: errorMessages.internalServerError });
             }
           
         }).catch((error) => {
+            console.log(error,"err")
             res.send({ statusCode: 500, result: [], status: 'Failure', message: errorMessages.internalServerError });
         })
 
     } catch (err) {
+        console.log(err,"err")
         res.send({ statusCode: 500, result: [], status: 'Failure', message: errorMessages.internalServerError });
     }
 }

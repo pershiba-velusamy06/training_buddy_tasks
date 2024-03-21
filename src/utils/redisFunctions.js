@@ -1,9 +1,12 @@
 import client from '../index.js'
+import redis from 'redis'
 
 
+export const setRedisData = async (key, data) => {
+ 
+    await client.set(key, data, redis.print);
+    await client.expire(key, 5*60);
 
-export const setRedisData = (key, data) => {
-    client.set(key, data);
 }
 
 export const getReditData = (key) => {
@@ -13,7 +16,7 @@ export const getReditData = (key) => {
             console.error('Error getting key:', err);
             return;
         }
-       
+
         return value
     });
 
@@ -25,7 +28,7 @@ export const deleteKey = (key) => {
         if (error) {
             console.error('Error deleting key:', error);
         } else {
-         
+
             return true
         }
     });

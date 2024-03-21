@@ -42,7 +42,7 @@ export const userSignUpDataChecker = async (req, res) => {
 
                     })
                     .catch((error) => {
-                      
+                        console.log(error,"err")
                         reject(error)
                     });
 
@@ -50,7 +50,7 @@ export const userSignUpDataChecker = async (req, res) => {
             }
 
         } catch (error) {
-          
+            console.log(error,"err")
             reject(error)
         }
     })

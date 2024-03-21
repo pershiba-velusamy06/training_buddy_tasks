@@ -8,6 +8,12 @@ export async function verifyOtp(req, res) {
     try {
         await VerifyOtpChecker(req, res).then((response) => {
             if (response) {
+                if (response === "Otp expired") {
+                    return res.send({
+                        statusCode: 500, result: [], success: true,
+                        isAuth: false, message: response
+                    });
+                }
                 res.status(200).send({
                     Result: response,
                     success: true,

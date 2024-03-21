@@ -29,6 +29,8 @@ export const VerifyOtpChecker = async (req, res) => {
                     resolve(null)
                 }
 
+            }else{
+                resolve("Otp expired")
             }
 
 

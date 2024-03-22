@@ -18,4 +18,5 @@ export const PracticeHelper = {
 
 export const v2AwardsHelper = {
     addUserAwards: '/addUserAwards',
+    viewUserAwards: '/viewUserAwards',
 }

@@ -17,3 +17,9 @@ export const successMessage={
 }
 
 export const allowedParams = ['start', 'offset'];
+
+export const constructDataURL=(dataBuffer, contentType)=> {
+   
+    const base64String = dataBuffer.toString('base64');
+    return `data:${contentType};base64,${base64String}`;
+}

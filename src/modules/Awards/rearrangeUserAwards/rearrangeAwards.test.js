@@ -188,9 +188,7 @@ describe('Awards Routes - Rearrange User Awards', () => {
       isAuth: false,
       errorCode: -1,
       result: [],
-      errors: [{
-        field: "invalid",
-        message: "must NOT have additional properties" }],
+      message: "must NOT have additional properties"
     });
   });
 
@@ -209,9 +207,8 @@ describe('Awards Routes - Rearrange User Awards', () => {
       isAuth: false,
       errorCode: -1,
       result: [],
-      errors: [{ 
-        field: "awards",
-        message: "Awards array cannot be empty." }]
+      message: "Awards array cannot be empty."
+   
     });
   });
   it('should return error response for missing params', async () => {
@@ -228,9 +225,8 @@ describe('Awards Routes - Rearrange User Awards', () => {
       isAuth: false,
       errorCode: -1,
       result: [],
-      errors: [{ 
-        field: "awards",
-        message: "must have required property 'awards'" }]
+      message: "must have required property 'awards'"
+     
     });
   });
 

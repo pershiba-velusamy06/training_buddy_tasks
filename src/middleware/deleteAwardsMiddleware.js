@@ -7,9 +7,7 @@ const ajv = new Ajv();
 const validateDeleteAwards = ajv.compile(deleteAwardsSchema);
 
 export const deleteAwardsMiddleware = (req, res, next) => {
-    if (!req.headers.authorization) {
-        return sendErrorResponse(res, "User not authorized")
-    }
+ 
 
     const valid = validateDeleteAwards(req.body);
     if (!valid) {
@@ -18,26 +16,30 @@ export const deleteAwardsMiddleware = (req, res, next) => {
                 error?.params?.missingProperty : error?.keyword === "additionalProperties" ? error?.params?.additionalProperty : error.instancePath.replace("/", ""),
             message: error.message
         }));
-      
+
         return res.status(500).json({
             success: false,
             isAuth: false,
             errorCode: -1,
-            errors
+            message: errors[0].message
         });
     }
-    const awardsError = req.body.awards.includes("") ? {
-        field: "awards",
-        message: "Awards array should not contain empty strings"
-    } : null;
-    if (awardsError) {
+    // const awardsError = req.body.awards.includes("") ? {
+    //     field: "awards",
+    //     message: "Awards array should not contain empty strings"
+    // } : null;
+    if (req.body.awards.includes("")) {
         return res.status(500).json({
             success: false,
             isAuth: false,
             errorCode: -1,
-            errors:[awardsError]
+            message: "Awards array should not contain empty strings"
         });
     }
+    if (!req.headers.authorization) {
+        return  sendErrorResponse(res, "User not authorized")
+    }
+
     next()
 }
 

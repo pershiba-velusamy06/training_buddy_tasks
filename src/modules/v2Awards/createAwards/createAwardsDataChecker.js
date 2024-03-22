@@ -7,7 +7,8 @@ export const createAwardsDataCheckers = async (req, res) => {
     try {
 
 
-        const valid = validateAddUserAwards(req.body);
+        const valid =await validateAddUserAwards(req.body);
+       
         if (!valid) {
         
             const errors = validateAddUserAwards.errors.map(error => ({
@@ -41,7 +42,7 @@ export const createAwardsDataCheckers = async (req, res) => {
         }
 
     } catch (err) {
-  
+  console.log(err)
         throw Error('Internal server Error')
     }
 

@@ -122,7 +122,8 @@ describe('Awards Routes', () => {
       isAuth: false,
       success: false,
       result:[],
-      errors: [{ field: "awardTitle", message: "must NOT have fewer than 3 characters" }]
+      message: "must NOT have fewer than 3 characters" 
+     
     });
   });
 
@@ -145,9 +146,9 @@ describe('Awards Routes', () => {
       errorCode: -1,
       isAuth: false,
       success: false,
-    
-      result:[],
-      errors: [{ field: "issuedDate", message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy." }]
+      message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy.",
+      result:[]
+     
     });
   });
 
@@ -171,9 +172,9 @@ describe('Awards Routes', () => {
       errorCode: -1,
       isAuth: false,
       success: false,
-   
+      message: "must NOT have additional properties" ,
       result:[],
-      errors: [{ field: "test", message: "must NOT have additional properties" }]
+    
     });
 
   });
@@ -197,7 +198,8 @@ describe('Awards Routes', () => {
       isAuth: false,
       errorCode: -1,
       result:[],
-      errors: [{ message: 'User not authorized' }]
+      message: 'User not authorized' 
+   
     });
   });
 
@@ -219,6 +221,7 @@ describe('Awards Routes', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
+      
       message: 'Invalid file type. Only JPG/JPEG, PNG, and PDF files are allowed.'
     });
 
@@ -252,3 +255,7 @@ describe('Awards Routes', () => {
 
 
 });
+
+
+
+2893.20

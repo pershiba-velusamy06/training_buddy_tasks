@@ -26,7 +26,7 @@ export const deleteAwardsDataChecker = async (req, res) => {
         }
 
     } catch (error) {
-      
+      console.log(error)
         throw Error('Internal server Error')
     }
 }

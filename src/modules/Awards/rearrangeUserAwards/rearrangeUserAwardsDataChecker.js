@@ -59,6 +59,7 @@ export const rearrangeUserAwardsDataChecker = async (req, res) => {
         }
 
     } catch (error) {
+        console.log(error)
         throw new Error('Internal server Error');
     }
 }

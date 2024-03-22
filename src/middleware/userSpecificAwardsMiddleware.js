@@ -27,7 +27,7 @@ export const userSpecificAwardsMiddleware = (req, res, next) => {
             success: false,
             isAuth: false,
             errorCode: -1,
-            errors
+            message: errors[0].message
         });
     }
     if (!req.headers.authorization) {

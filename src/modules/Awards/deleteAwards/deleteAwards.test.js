@@ -68,7 +68,7 @@ describe('Awards Routes - Delete User Awards', () => {
 
     const response = await request(app)
       .delete('/deleteUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMDUiLCJpYXQiOjE3MTEwODg0NTUsImV4cCI6MTcxMTk1MjQ1NX0.qsTyaJIi4vqKiGQIt0z02EbJwZ8ApF3293QLDmrstOc')
       .send(validAwardsToDelete);
 
     // expect(response.statusCode).toStrictEqual(200);
@@ -107,18 +107,19 @@ describe('Awards Routes - Delete User Awards', () => {
 
     const response = await request(app)
       .delete('/deleteUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMDUiLCJpYXQiOjE3MTEwODg0NTUsImV4cCI6MTcxMTk1MjQ1NX0.qsTyaJIi4vqKiGQIt0z02EbJwZ8ApF3293QLDmrstOc')
       .send(invalidAwardsToDelete);
 
     expect(response.statusCode).toStrictEqual(500);
-    expect(response.body).toStrictEqual({
+    expect(response.body).toEqual({
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [{
-        field: "awards",
-        message: 'Awards array should not contain empty strings'
-      }]
+      message: 'Awards array should not contain empty strings'
+      // errors: [{
+      //   field: "awards",
+      //   message: 'Awards array should not contain empty strings'
+      // }]
     });
   });
 
@@ -130,7 +131,7 @@ describe('Awards Routes - Delete User Awards', () => {
 
     const response = await request(app)
       .delete('/deleteUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMDUiLCJpYXQiOjE3MTEwODg0NTUsImV4cCI6MTcxMTk1MjQ1NX0.qsTyaJIi4vqKiGQIt0z02EbJwZ8ApF3293QLDmrstOc')
       .send(invalidAwardsToDelete);
 
     expect(response.statusCode).toStrictEqual(500);
@@ -138,10 +139,11 @@ describe('Awards Routes - Delete User Awards', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [{
-        field: "age",
-        message: 'must NOT have additional properties'
-      }]
+      message: 'must NOT have additional properties'
+      // errors: [{
+      //   field: "age",
+      //   message: 'must NOT have additional properties'
+      // }]
     });
   });
 
@@ -152,7 +154,7 @@ describe('Awards Routes - Delete User Awards', () => {
 
     const response = await request(app)
       .delete('/deleteUserAwards')
-      .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMzUiLCJpYXQiOjE3MTA1MDA4ODgsImV4cCI6MTcxMTM2NDg4OH0.76LxDkKSpAup4rsdm0uxblh1NP5zy7tyiiyzG79BFdk')
+      .set('Authorization', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwaG9uZU51bWJlciI6Iis5MTk3ODc1NDYzMDUiLCJpYXQiOjE3MTEwODg0NTUsImV4cCI6MTcxMTk1MjQ1NX0.qsTyaJIi4vqKiGQIt0z02EbJwZ8ApF3293QLDmrstOc')
       .send(invalidAwardsToDelete);
 
     expect(response.statusCode).toStrictEqual(500);
@@ -160,10 +162,11 @@ describe('Awards Routes - Delete User Awards', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [{
-        field: "awards",
-        message: 'must be array'
-      }]
+      message: 'must be array'
+      // errors: [{
+      //   field: "awards",
+      //   message: 'must be array'
+      // }]
     });
   });
 });

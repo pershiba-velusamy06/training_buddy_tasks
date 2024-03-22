@@ -30,7 +30,7 @@ export async function createAwardsController(req, res) {
                         success: false,
                         isAuth: false,
                         errorCode: -1,
-                        errors: [response],
+                         message: response.message,
                         result: []
                     });
                 }
@@ -39,6 +39,7 @@ export async function createAwardsController(req, res) {
     
 
     } catch (error) {
+        console.log(error)
         res.status(500).send({ errorCode: -1, result: [], status: 'Failure', message: 'internal server error' });
     }
 }

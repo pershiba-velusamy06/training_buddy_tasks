@@ -18,17 +18,18 @@ export const rearrangeAwardsValidationMiddleware = (req, res, next) => {
             isAuth: false,
             errorCode: -1,
             result:[],
-            errors
+            message: errors[0].message
         });
     }
 
-    if (!req.body.awards || req.body.awards.length === 0) { // Custom check for empty awards array
+    if (!req.body.awards || req.body.awards.length === 0) { 
         return res.status(500).json({
             success: false,
             isAuth: false,
             errorCode: -1,
             result:[],
-            errors: [{ field: 'awards', message: 'Awards array cannot be empty.' }]
+            message: 'Awards array cannot be empty.'
+            // errors: [{ field: 'awards',  }]
         });
     }
 

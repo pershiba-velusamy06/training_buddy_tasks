@@ -42,7 +42,10 @@ export const userValidation = async(req, res, next) => {
         return res.status(500).json({ success: false,
             isAuth: false,
             errorCode: -1,
-            errors});
+            result:[],
+            message: errors[0].message
+          
+        });
     }
     const existingUser = await userbyEmailforSignUpValidator(req.body.email);
     if (existingUser && existingUser.phoneNumber !== req.body.phoneNumber) {

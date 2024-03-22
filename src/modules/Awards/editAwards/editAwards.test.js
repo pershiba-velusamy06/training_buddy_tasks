@@ -199,7 +199,8 @@ describe('Awards Routes - Edit', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [{ field: "awardTitle", message: "must NOT have fewer than 3 characters" }],
+      message: "must NOT have fewer than 3 characters"
+      // errors: [{ field: "awardTitle", message: "must NOT have fewer than 3 characters" }],
 
     });
   });

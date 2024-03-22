@@ -17,7 +17,7 @@ export const editAwardsValidationMiddleware = (req, res, next) => {
             success: false,
             isAuth: false,
             errorCode: -1,
-            errors
+            message: errors[0].message
         });
     }
 

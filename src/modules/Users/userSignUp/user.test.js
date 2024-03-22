@@ -79,12 +79,8 @@ describe('User Routes', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [
-        expect.objectContaining({
-          field: "phoneNumber",
-          message: 'Invalid phone number format. It should start with +91 and be 10 digits long.'
-        })
-      ]
+      message: 'Invalid phone number format. It should start with +91 and be 10 digits long.',
+     result:[]
     });
   });
 
@@ -105,11 +101,9 @@ describe('User Routes', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [
-        expect.objectContaining({
-          field: "lastname",
-          message: 'Last name should be between 3 and 20 characters long.'
-        })]
+      result:[],
+      message: 'Last name should be between 3 and 20 characters long.'
+     
     });
   });
 
@@ -131,11 +125,9 @@ describe('User Routes', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [
-        expect.objectContaining({
-          field: "age",
-          message: 'must NOT have additional properties'
-        })]
+      result:[],
+      message: 'must NOT have additional properties'
+   
     });
   });
 
@@ -156,11 +148,8 @@ describe('User Routes', () => {
       success: false,
       isAuth: false,
       errorCode: -1,
-      errors: [
-        expect.objectContaining({
-          field: "email",
-          message: 'Invalid email format.'
-        })]
+      message: 'Invalid email format.',
+      result:[],
     });
   });
 

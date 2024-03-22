@@ -88,12 +88,13 @@ describe('Awards Routes', () => {
       errorCode: -1,
       success: false,
       isAuth: false,
-      errors: [
-        expect.objectContaining({
-          field: "awardTitle",
-          message: "must NOT have fewer than 3 characters"
-        })
-      ]
+      message: "must NOT have fewer than 3 characters"
+      // errors: [
+      //   expect.objectContaining({
+      //     field: "awardTitle",
+      //     message: "must NOT have fewer than 3 characters"
+      //   })
+      // ]
     });
   });
 
@@ -115,13 +116,14 @@ describe('Awards Routes', () => {
       errorCode: -1,
       success: false,
       isAuth: false,
-      errors: [
-        expect.objectContaining( {
-          field: "issuedDate",
-          message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy."
-        })
+      message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy."
+      // errors: [
+      //   expect.objectContaining( {
+      //     field: "issuedDate",
+      //     message: "Invalid format for issuedDate. It should be in the format dd/mm/yyyy."
+      //   })
        
-      ]
+      // ]
     });
   });
 
@@ -144,12 +146,13 @@ describe('Awards Routes', () => {
       errorCode: -1,
       success: false,
       isAuth: false,
-      errors: [
-        {
-          field: "test",
-          message: "must NOT have additional properties"
-        }
-      ]
+      message: "must NOT have additional properties"
+      // errors: [
+      //   {
+      //     field: "test",
+      //     message: "must NOT have additional properties"
+      //   }
+      // ]
     });
   });
   

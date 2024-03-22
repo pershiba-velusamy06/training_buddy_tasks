@@ -229,7 +229,7 @@ describe('Awards Routes', () => {
 
 
   it('Should return 500 with error message for file too large', async () => {
-    // Creating a large file (greater than 10MB) for testing file size limit
+    
     const filePath = path.resolve(__dirname, 'sample-pdf-download-10-mb.pdf');
     const fileBuffer = fs.readFileSync(filePath)
 

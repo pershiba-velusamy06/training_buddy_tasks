@@ -5,8 +5,11 @@ const awardsschema = new Schema({
     description: { type: String },
     issuedBy: { type: String, required: true },
     issuedDate: { type: String, required: true },
-    awardCertificateURL: { type: String }
-    
+    awardCertificateURL: {
+        data: { type: "Buffer" },
+        contentType: { type: 'string' }
+    }
+
 });
 
 const Award = model('Award', awardsschema);
